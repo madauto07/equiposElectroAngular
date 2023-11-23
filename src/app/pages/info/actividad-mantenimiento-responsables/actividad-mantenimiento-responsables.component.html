@@ -1,0 +1,192 @@
+
+<!--#region  Criterios de Busqueda - Filtro -->
+<h2 class="title_registro">Responsables de actividades</h2>
+<div fxLayout="row" fxLayoutGap="10">
+    <div fxFlex="45%">
+    <p> Busqueda de Trabajadores </p>
+    
+
+    <form [formGroup]="form" fxLayout="column" fxLayoutGap="20px">
+
+
+        <mat-form-field appearance="outline">
+            <mat-label>Modulo</mat-label>
+            <mat-select
+              [(ngModel)]="selectedAreaFiltro"
+              name="area"
+              (selectionChange)="selectedValueArea($event)"
+            >
+              <mat-option *ngFor="let modulo of listaArea" [value]="modulo.intId">
+                {{ modulo.strNombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+    </form>
+
+   <div class="table-container">
+
+    <div *ngIf="isLoadingResults" class="loading-shades">
+        <mat-spinner></mat-spinner> 
+   </div>
+
+    <div class="example-table-container">
+       
+      <mat-form-field appearance="standard">
+        <mat-label>Filtrar</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Buscar" #input>
+      </mat-form-field>
+      
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tableresponse">
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                  <mat-checkbox (change)="$event ? masterToggle() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                [aria-label]="checkboxLabel()">
+                  </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                  <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null"
+                                [checked]="selection.isSelected(row)"
+                                [aria-label]="checkboxLabel(row)">
+                  </mat-checkbox>
+                </td>
+              </ng-container>
+
+            <ng-container matColumnDef="codigo" width="70%">
+                <th mat-header-cell *matHeaderCellDef> Codigo </th>
+                <td mat-cell *matCellDef="let element"> {{ element.strCodigo }} </td>
+            </ng-container>
+           
+            <ng-container matColumnDef="nombre" width="20%">
+                <th mat-header-cell *matHeaderCellDef> Apellidos y Nombres </th>
+                <td mat-cell *matCellDef="let element"> {{ element.strApellido }}  {{ element.strNombre }} </td>
+            </ng-container>
+           
+            <ng-container matColumnDef="especialidad" width="10%">
+                <th mat-header-cell *matHeaderCellDef> Especialidad </th>
+                <td mat-cell *matCellDef="let element">   {{ element.objEspecialidad.strValor }} </td>
+            </ng-container>
+
+          
+           
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row
+            
+            *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+    <div *ngIf="!dataSource.data.length" style="border: solid 0px;padding: 10px;">
+        <div style="text-align: center;">
+            <div class="text-info">
+                <div style="color:#BDBDC4; font-size: 20px;">No se encontraron registros.</div>
+            </div>
+        </div>
+    </div>
+        <mat-paginator [pageSize]="numeroFilas" [pageSizeOptions]="[5, 10, 15, 20, 50]" [showFirstLastButtons]="true"
+        [length]="cantidadRegistros" (page)="handlePage($event)" class="mat-elevation-z8">
+        </mat-paginator>
+
+
+    
+</div>
+
+
+    </div>
+    <div fxFlex="10%" fxLayoutAlign="space-around center" >
+
+        <div  fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="space-between center" >
+
+         
+        <button mat-icon-button color="primary" tooltip="Actualizar"
+        (click)="desAsignarResponsable()" style="cursor: pointer; font-size: 20px;">
+        <mat-icon >arrow_circle_left</mat-icon>
+        </button>
+
+        <button mat-icon-button color="primary" tooltip="Actualizar"
+        (click)="asignarResponsable()" style="cursor: pointer; ">
+        <mat-icon >arrow_circle_right</mat-icon>
+    </button>
+
+
+          
+        </div>
+    </div>
+
+    <div fxFlex="45%">
+        <p> Trabajadores Asignados </p>
+
+        <p></p><p></p>
+        <div class="table-container">
+            <div class="example-table-container">
+           
+                <table mat-table [dataSource]="dataSourceFA" class="mat-elevation-z8 tableresponse">
+                   
+                    <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+                          <mat-checkbox (change)="$event ? masterToggleFA() : null"
+                                        [checked]="selection.hasValue() && isAllSelectedFA()"
+                                        [indeterminate]="selectionFA.hasValue() && !isAllSelectedFA()"
+                                        [aria-label]="checkboxLabelFA()">
+                          </mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                          <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="$event ? selectionFA.toggle(row) : null"
+                                        [checked]="selectionFA.isSelected(row)"
+                                        [aria-label]="checkboxLabelFA(row)">
+                          </mat-checkbox>
+                        </td>
+                      </ng-container>
+        
+                   
+                    <ng-container matColumnDef="codigo" width="70%">
+                        <th mat-header-cell *matHeaderCellDef> codigo </th>
+                        <td mat-cell *matCellDef="let element"> {{ element.objTrabajador.strCodigo }}  </td>
+                    </ng-container>
+                   
+                    <ng-container matColumnDef="nombre" width="70%">
+                        <th mat-header-cell *matHeaderCellDef> Apellidos y Nombres </th>
+                        <td mat-cell *matCellDef="let element"> {{ element.objTrabajador.strNombre }}  {{ element.objTrabajador.strApellido }}</td>
+                    </ng-container>
+                   
+                    <ng-container matColumnDef="especialidad" width="70%">
+                        <th mat-header-cell *matHeaderCellDef> Especialidad </th>
+                        <td mat-cell *matCellDef="let element"> {{ element.objConstante.strValor }} </td>
+                    </ng-container>
+                   
+        
+                   
+                   
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsFA"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsFA;"></tr>
+                </table>
+            </div>
+            <div *ngIf="!dataSourceFA.data.length" style="border: solid 0px;padding: 10px;">
+                <div style="text-align: center;">
+                    <div class="text-info">
+                        <div style="color:#BDBDC4; font-size: 20px;">No se encontraron registros.</div>
+                    </div>
+                </div>
+            </div>
+
+            <mat-paginator [pageSize]="numeroFilasAsignado" [pageSizeOptions]="[5, 10, 15, 20, 50]" [showFirstLastButtons]="true"
+            [length]="cantidadRegistrosAsignado" (page)="handlePageAsignado($event)" class="mat-elevation-z8">
+            </mat-paginator>
+        
+        </div>
+  
+      </div>
+  </div>
+
+
+ 
+
+
+
+
+
+
+

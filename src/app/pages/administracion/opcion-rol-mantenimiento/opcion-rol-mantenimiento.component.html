@@ -1,0 +1,114 @@
+<div *ngIf="isLoading" class="loading-shades">
+  <mat-spinner></mat-spinner>
+</div>
+<form
+  [formGroup]="form"
+  (ngSubmit)="guardar($event)"
+>
+  <mat-card>
+    <mat-card-title>
+      <h4 class="sub_title">Registrar Opcion a Perfil</h4>
+    </mat-card-title>
+    <mat-card-content
+      style="width: 100%"
+      fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayout="row"
+      fxLayoutAlign="start start"
+      fxLayoutGap="10px"
+    >
+      <div fxFlex="70" style="width: 100%">
+        <!-- Modulo -->
+        <mat-form-field appearance="outline" style="width: 100%">
+          <mat-label>Modulo</mat-label>
+          <input
+            type="text"
+            placeholder="Seleccione modulo"
+            aria-label="modulo"
+            matInput
+            formControlName="modulo"
+            [matAutocomplete]="moduloAutocomplete"
+            #inputFocoInicial
+          />
+          <mat-autocomplete
+            id="controlModulo"
+            #moduloAutocomplete="matAutocomplete"
+            (optionSelected)="selectedModulo($event)"
+            [displayWith]="mostrarNombreModuloSelect"
+          >
+            <mat-option
+              *ngFor="let obj of listaModuloFiltrada | async"
+              [value]="obj"
+            >
+              {{ obj.strNombre }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <!-- Opcion -->
+        <mat-form-field appearance="outline" style="width: 100%">
+          <mat-label>Opcion</mat-label>
+          <input
+            type="text"
+            placeholder="Seleccione opcion"
+            aria-label="opcion"
+            matInput
+            formControlName="opcion"
+            [matAutocomplete]="opcionAutocomplete"
+          />
+          <mat-autocomplete
+            #opcionAutocomplete="matAutocomplete"
+            [displayWith]="mostrarNombreOpcionSelect"
+          >
+            <mat-option
+              *ngFor="let obj of listaOpcionFiltrada | async"
+              [value]="obj"
+            >
+              {{ obj.strNombre }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <!-- Tipo Acceso -->
+        <mat-form-field appearance="outline" style="width: 100%">
+          <mat-label>Tipo Acceso</mat-label>
+          <input
+            type="text"
+            placeholder="Seleccione tipo de acceso"
+            aria-label="tipo de acceso"
+            matInput
+            formControlName="tipoAcceso"
+            [matAutocomplete]="tipoAccesoAutocomplete"
+          />
+          <mat-autocomplete
+            #tipoAccesoAutocomplete="matAutocomplete"
+            [displayWith]="mostrarNombreTipoAccesoSelect"
+          >
+            <mat-option
+              *ngFor="let obj of listaTipoAccesoFiltrada | async"
+              [value]="obj"
+            >
+              {{ obj.strValor }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div
+        fxLayout.xs="row"
+        fxLayout.sm="row"
+        fxLayout="column"
+        fxLayoutGap="10px"
+      >
+        <button mat-flat-button type="submit" color="primary">
+          Guardar
+        </button>
+        <button
+          (click)="ocultarComponente()"
+          mat-flat-button
+          type="button"
+          color="accent"
+        >
+          Cancelar
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</form>

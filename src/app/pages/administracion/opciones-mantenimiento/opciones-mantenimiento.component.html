@@ -1,0 +1,213 @@
+<div *ngIf="isLoadingResults" class="loading-shades">
+  <mat-spinner></mat-spinner>
+</div>
+<mat-card>
+  <mat-card-title color="primary">
+    <h2 class="title_registro">{{ titulo }}</h2>
+  </mat-card-title>
+  <mat-card-content fxLayout>
+    <form
+      [formGroup]="formOpcion"
+      (ngSubmit)="GuardarOpcion()"
+      fxFlex.lt-md="100"
+      fxFlex.gt-sm="70"
+    >
+      <!-- Contenido -->
+      <div fxLayout="row">
+        <mat-form-field
+          appearance="outline"
+          fxFlex.lt-md="100"
+          fxFlex.gt-sm="15"
+        >
+          <mat-label>Id</mat-label>
+          <input
+            type="number"
+            placeholder="Id"
+            matInput
+            formControlName="intId"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- IdModulo y IdObjetoPadre -->
+      <div
+        fxLayout.lt-md="column"
+        fxLayout.gt-sm="row"
+        fxLayoutGap.gt-sm="1rem"
+      >
+        <!-- IdModulo -->
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Módulo</mat-label>
+          <input
+            #inputFocoInicial
+            type="text"
+            placeholder="Seleccione modulo"
+            aria-label="Modulo"
+            matInput
+            formControlName="moduloSelect"
+            [matAutocomplete]="moduloAutocomplete"
+          />
+          <mat-autocomplete
+            #moduloAutocomplete="matAutocomplete"
+            [displayWith]="getModuloName"
+            (optionSelected)="selectedModulo($event)"
+          >
+            <mat-option
+              *ngFor="let modulo of listaModulosFiltrada | async"
+              [value]="modulo"
+            >
+              {{ modulo.strNombre }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <!-- IdObjetoPadre -->
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Opcion Padre</mat-label>
+          <input
+            type="text"
+            placeholder="Seleccione opcion padre"
+            aria-label="Opcion Padre"
+            matInput
+            formControlName="opcionPadreSelect"
+            [matAutocomplete]="opcionpadreAutocomplete"
+          />
+          <mat-autocomplete
+            #opcionpadreAutocomplete="matAutocomplete"
+            [displayWith]="getOpcionPadreName"
+          >
+            <mat-option
+              *ngFor="let opcionPadre of listaOpcionesPadreFiltrada | async"
+              [value]="opcionPadre"
+            >
+              {{ opcionPadre.strNombre }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <!-- Nombre -->
+      <div fxLayout="row">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Nombre(*)</mat-label>
+          <input
+            type="text"
+            placeholder="Nombre"
+            matInput
+            formControlName="strNombre"
+          />
+        </mat-form-field>
+      </div>
+      <!-- Descripcion -->
+      <div fxLayout="row">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Descripción</mat-label>
+          <input
+            type="text"
+            placeholder="Digite descripción"
+            matInput
+            formControlName="strDescripcion"
+          />
+        </mat-form-field>
+      </div>
+      <!-- URL Y ORDEN -->
+      <div
+        fxLayout.lt-md="column"
+        fxLayout.gt-sm="row"
+        fxLayoutGap.gt-sm="1rem"
+      >
+        <!-- URL -->
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>URL</mat-label>
+          <input
+            type="text"
+            placeholder="Digite URL"
+            matInput
+            formControlName="strURL"
+          />
+        </mat-form-field>
+        <!-- Orden -->
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Oden</mat-label>
+          <input
+            type="number"
+            placeholder="Digite Orden"
+            matInput
+            formControlName="dbOrden"
+          />
+        </mat-form-field>
+      </div>
+      <!-- Icono -->
+      <div fxLayout="row" fxLayoutAlign="start stretch">
+        <mat-form-field
+          appearance="outline"
+          fxFlex.lt-md="80"
+          fxFlex.gt-sm="49.45"
+        >
+          <mat-label>Icono</mat-label>
+          <input
+            type="text"
+            placeholder="Seleccione icono"
+            aria-label="icono"
+            matInput
+            formControlName="iconoSelect"
+            [matAutocomplete]="iconoAutocomplete"
+          />
+          <mat-autocomplete
+            [displayWith]="getIconoName"
+            #iconoAutocomplete="matAutocomplete"
+            (optionSelected)="selectedIcono($event)"
+          >
+            <mat-option
+              *ngFor="let icono of listaIconosFiltrada | async"
+              [value]="icono"
+            >
+              {{ icono.strValor }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div fxFlex class="ml-2">
+          <i [class]="nombreIcono"  style="font-size: 2.5rem;"></i>
+        </div>
+      </div>
+      <!-- Estado -->
+      <div fxLayout="row">
+        <mat-slide-toggle formControlName="intEstado" color="primary"
+          >Estado</mat-slide-toggle
+        >
+      </div>
+
+      <!-- Label Campo Obligatorio -->
+      <div class="label_campo_obligatorio">
+        <label>(*)Campo obligatorio</label>
+      </div>
+
+      <!-- Botonera -->
+      <div
+        fxLayout.lt-md="column"
+        fxLayout.gt-sm="row"
+        fxLayoutAlign.lt-md="space-around stretch"
+        fxLayoutAlign.gt-sm="start end"
+        fxLayoutGap.lt-md="0.5rem"
+        fxLayoutGap.gt-sm="1.5rem"
+      >
+        <button
+          mat-flat-button
+          type="submit"
+          color="primary"
+          [disabled]="soloLectura"
+        >
+          <mat-icon>save</mat-icon> <span>Guardar</span>
+        </button>
+        <button
+          mat-flat-button
+          type="button"
+          color="accent"
+          (click)="Cancelar()"
+        >
+          <span>Cancelar</span>
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

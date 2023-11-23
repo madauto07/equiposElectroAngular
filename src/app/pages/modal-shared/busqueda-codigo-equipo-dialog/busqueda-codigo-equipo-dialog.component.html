@@ -1,0 +1,199 @@
+<!--#region Titulo -->
+<h3 class="title">Busqueda por Ubicación</h3>
+<!--#endregion -->
+
+<form [formGroup]="form" fxFill fxLayout="column" fxLayoutGap="5px">
+  <!-- Nivel 2 - Equipo -->
+  <mat-card>
+    <mat-card-title class="sub_title">Nivel 2 - Equipo </mat-card-title>
+    <mat-card-content>
+      <div fxLayout="column" fxFill fxLayoutGap="5px">
+        <!-- Datos de Prefijo A0 -->
+        <mat-form-field appearance="outline">
+          <mat-label>A0</mat-label>
+          <input
+            type="text"
+            placeholder="Seleccione dato A0"
+            aria-label="Dato A0"
+            matInput
+            formControlName="datoA0SelectAC"
+            [matAutocomplete]="datoA0Autocomplete"
+          />
+          <mat-autocomplete
+            #datoA0Autocomplete="matAutocomplete"
+            [displayWith]="mostrarNombreDatoA0Select"
+          >
+            <mat-option
+              *ngFor="let datoA0 of listaDatoA0Filtrada | async"
+              [value]="datoA0"
+            >
+            {{datoA0.strCodigo +" "+  datoA0.strNombre }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <!-- Datos de Prefijo A1 -->
+        <mat-form-field appearance="outline">
+          <mat-label>A1</mat-label>
+          <input
+            type="text"
+            placeholder="Seleccione dato A1"
+            aria-label="Dato A1"
+            matInput
+            formControlName="datoA1SelectAC"
+            [matAutocomplete]="datoA1Autocomplete"
+          />
+          <mat-autocomplete
+            #datoA1Autocomplete="matAutocomplete"
+            [displayWith]="mostrarNombreDatoA1Select"
+            (optionSelected)="selectedDatoA1($event)"
+          >
+            <mat-option
+              *ngFor="let datoA1 of listaDatoA1Filtrada | async"
+              [value]="datoA1"
+            >
+            {{datoA1.strCodigo +" - "+  datoA1.strNombre }}
+              
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <!-- Datos de Prefijo A2 -->
+        <mat-form-field appearance="outline">
+          <mat-label>A2</mat-label>
+          <input
+            type="text"
+            placeholder="Seleccione dato A2"
+            aria-label="Dato A2"
+            matInput
+            formControlName="datoA2SelectAC"
+            [matAutocomplete]="datoA2Autocomplete"
+          />
+          <mat-autocomplete
+            #datoA2Autocomplete="matAutocomplete"
+            [displayWith]="mostrarNombreDatoA2Select"
+          >
+            <mat-option
+              *ngFor="let datoA2 of listaDatoA2Filtrada | async"
+              [value]="datoA2"
+            >
+              
+              {{datoA2.strCodigo +" - "+  datoA2.strNombre }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <!-- Datos de Prefijo AN -->
+        <mat-form-field appearance="outline">
+          <mat-label>AN</mat-label>
+          <input
+            matInput
+            placeholder="Ingrese AN"
+            type="text"
+            formControlName="datoAN"
+            maxlength="2"
+          />
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <!-- Nivel 3 - Componente -->
+  <mat-card>
+    <mat-card-title class="sub_title">Nivel 3 - Componente</mat-card-title>
+    <mat-card-content>
+      <div fxLayout="column" fxFill fxLayoutGap="5px">
+        <!-- Datos de Prefijo B1 -->
+        <mat-form-field appearance="outline">
+          <mat-label>B1</mat-label>
+          <input
+            type="text"
+            placeholder="Seleccione dato B1"
+            aria-label="Dato B1"
+            matInput
+            formControlName="datoB1SelectAC"
+            [matAutocomplete]="datoB1Autocomplete"
+          />
+          <mat-autocomplete
+            #datoB1Autocomplete="matAutocomplete"
+            [displayWith]="mostrarNombreDatoB1Select"
+            (optionSelected)="selectedDatoB1($event)"
+          >
+            <mat-option
+              *ngFor="let datoB1 of listaDatoB1Filtrada | async"
+              [value]="datoB1"
+            >
+            {{datoB1.strCodigo +" - "+  datoB1.strNombre }}
+              
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <!-- Datos de Prefijo B2 -->
+        <mat-form-field appearance="outline">
+          <mat-label>B2</mat-label>
+          <input
+            type="text"
+            placeholder="Seleccione dato B2"
+            aria-label="Dato B2"
+            matInput
+            formControlName="datoB2SelectAC"
+            [matAutocomplete]="datoB2Autocomplete"
+          />
+          <mat-autocomplete
+            #datoB2Autocomplete="matAutocomplete"
+            [displayWith]="mostrarNombreDatoB2Select"
+          >
+            <mat-option
+              *ngFor="let datoB2 of listaDatoB2Filtrada | async"
+              [value]="datoB2"
+            >
+            {{datoB2.strCodigo +" - "+  datoB2.strNombre }}
+              
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <!-- Datos de Prefijo BN -->
+        <mat-form-field appearance="outline">
+          <mat-label>BN</mat-label>
+          <input
+            matInput
+            placeholder="Ingrese BN"
+            type="text"
+            formControlName="datoBN"
+            maxlength="2"
+          />
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <!-- Resultado Codigo Generado -->
+  <div>
+    <p class="sub_title">Cód. Generado: {{ codigoGenerado }}</p>
+  </div>
+  <!-- Botones envió informacion -->
+  <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout
+    fxLayoutAlign.xs="start stretch"
+    fxLayoutAlign.sm="start stretch"
+    fxLayoutAlign="center start"
+    fxLayoutGap.xs="10px"
+    fxLayoutGap.sm="10px"
+    fxLayoutGap="20px"
+    fxFlexFill
+  >
+    <button
+      mat-flat-button
+      type="button"
+      color="primary"
+      (click)="seleccionar()"
+    >
+      <span>Seleccionar</span>
+    </button>
+    <button mat-flat-button type="button" color="accent" (click)="cancelar()">
+      <span>Cancelar</span>
+    </button>
+  </div>
+</form>

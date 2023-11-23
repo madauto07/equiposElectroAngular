@@ -1,0 +1,354 @@
+
+<!-- Titulo -->
+<h2 class="title">Generación de Programación {{strTitulo}}</h2>
+
+<!-- GENERAR POR AÑO -->
+<mat-card *ngIf="isActivateAnho">
+  <mat-card-title></mat-card-title>
+
+  <mat-card-content>
+
+    <form
+    [formGroup]="formAnho"
+    (ngSubmit)="generarAnual()"
+    [style.fontSize.px]="getFontSize()"
+    fxLayout="column"
+    fxLayoutAlign="space-around stretch"
+  >
+
+    <div
+    fxLayout="row"
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayoutAlign="start start"
+    fxLayoutGap="0.625rem"
+    style="width: 100%"
+  >
+    <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout="row"
+    fxLayoutAlign.xs="start stretch"
+    fxLayoutAlign.sm="start stretch"
+    fxLayoutAlign="start center"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap.sm="1px"
+    fxLayoutGap="20px"
+    >
+      <mat-form-field appearance="outline" fxFlex="80">
+        <mat-label>Titulo</mat-label>
+        <input
+          id="filtroNombreAnho"
+          matInput
+          placeholder="Nombre"
+          type="text"
+          [(ngModel)]="strBuscarNombreAnho"
+          formControlName="tituloAnho"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>Del</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker1"
+          formControlName="fechaInicio"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>aL</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker2"
+          formControlName="fechaFin"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label> Fecha Generación </mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker3"
+          formControlName="fechaGeneracion"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+        <mat-datepicker #picker3></mat-datepicker>
+      </mat-form-field>
+
+
+
+
+    </div>
+
+    <div
+      fxFlex="20"
+      fxFlex.xs="100"
+      fxFlex.sm="100"
+      fxLayout
+      fxLayout.xs="row"
+      fxLayoutAlign.xs="center end"
+      fxLayoutGap.xs="1px"
+      fxLayoutGap="2px"
+      fxLayoutAlign="center end"
+      fxLayout.sm="row"
+      fxLayoutAlign.sm="center end"
+      fxLayoutGap.sm="1px"
+    >
+      <button mat-flat-button type="button" color="primary" (click)="generarAnual()">
+        <mat-icon>search</mat-icon> <span>Generar</span>
+      </button>
+      <button mat-flat-button type="button" color="accent" (click)="limpiar()">
+        <span>Limpiar</span>
+      </button>
+    </div>
+  </div>
+
+    </form>
+  </mat-card-content>
+</mat-card>
+
+
+<!-- GENERAR POR MES -->
+<mat-card  *ngIf="isActivateMes">
+  <mat-card-title>
+    <h4 class="sub_title">Criterios de Generación</h4>
+  </mat-card-title>
+  <mat-card-content>
+
+    <form
+    [formGroup]="formMes"
+    (ngSubmit)="generarMensual()"
+    [style.fontSize.px]="getFontSize()"
+    fxLayout="column"
+    fxLayoutAlign="space-around stretch"
+  >
+  
+ 
+       
+    <div
+      fxLayout="row"
+      fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayoutAlign="start start"
+      fxLayoutGap="0.625rem"
+     
+    >
+      <div
+      fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayout="row"
+      fxLayoutAlign.xs="start stretch"
+      fxLayoutAlign.sm="start stretch"
+      fxLayoutAlign="start center"
+      fxLayoutGap.xs="1px"
+      fxLayoutGap.sm="1px"
+      fxLayoutGap="20px"
+      >
+        <mat-form-field appearance="outline" fxFlex="80">
+          <mat-label>Titulo</mat-label>
+          <input
+            id="filtroNombreMes"
+            matInput
+            placeholder="Nombre"
+            type="text"
+            [(ngModel)]="strBuscarNombreMensual"
+            formControlName="tituloMes"
+          />
+        </mat-form-field>
+  
+       
+        <mat-form-field appearance="outline">
+          <mat-label>Año</mat-label>
+          <input
+            matInput
+            placeholder="Año"
+            type="number"
+            formControlName="controlAnhoMes"
+          />
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Mes</mat-label>
+          <input
+            matInput
+            placeholder="Mes"
+            type="number"
+            min="1"
+            max="12"
+            formControlName="controlMes"
+          />
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label> Fecha Generación </mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker2"
+            formControlName="fechaGeneracionMes"
+          />
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+  
+  
+  
+  
+      </div>
+  
+      <div
+        fxFlex="20"
+        fxFlex.xs="100"
+        fxFlex.sm="100"
+        fxLayout
+        fxLayout.xs="row"
+        fxLayoutAlign.xs="center end"
+        fxLayoutGap.xs="1px"
+        fxLayoutGap="2px"
+        fxLayoutAlign="center end"
+        fxLayout.sm="row"
+        fxLayoutAlign.sm="center end"
+        fxLayoutGap.sm="1px"
+      >
+        <button mat-flat-button type="button" color="primary" (click)="generarMensual()">
+          <mat-icon>search</mat-icon> <span>Generar</span>
+        </button>
+        <button mat-flat-button type="button" color="accent" (click)="limpiar()">
+          <span>Limpiar</span>
+        </button>
+      </div>
+    </div>
+  
+  
+  </form>
+
+
+  </mat-card-content>
+</mat-card>
+
+
+<!-- GENERAR POR SEMANA -->
+<mat-card  *ngIf="isActivateSemana">
+  <mat-card-title>
+    <h4 class="sub_title">Criterios de Generación</h4>
+  </mat-card-title>
+  <mat-card-content>
+
+    <form
+    [formGroup]="formSemana"
+    (ngSubmit)="generarSemana()"
+    [style.fontSize.px]="getFontSize()"
+    fxLayout="column"
+    fxLayoutAlign="space-around stretch"
+  >
+  
+ 
+       
+    <div
+      fxLayout="row"
+      fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayoutAlign="start start"
+      fxLayoutGap="0.625rem"
+     
+    >
+      <div
+      fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayout="row"
+      fxLayoutAlign.xs="start stretch"
+      fxLayoutAlign.sm="start stretch"
+      fxLayoutAlign="start center"
+      fxLayoutGap.xs="1px"
+      fxLayoutGap.sm="1px"
+      fxLayoutGap="20px"
+      >
+        <mat-form-field appearance="outline" fxFlex="80">
+          <mat-label>Titulo</mat-label>
+          <input
+            id="filtroNombreSemana"
+            matInput
+            placeholder="Nombre"
+            type="text"
+            [(ngModel)]="strBuscarNombreSemana"
+            formControlName="tituloSemana"
+          />
+        </mat-form-field>
+  
+       
+        <mat-form-field appearance="outline">
+          <mat-label>Año</mat-label>
+          <input
+            matInput
+            placeholder="Año"
+            type="number"
+            formControlName="controlAnhoSemana"
+          />
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Semana</mat-label>
+          <input
+            matInput
+            placeholder="Semana"
+            type="number"
+            min="1"
+            max="60"
+            formControlName="controlSemana"
+          />
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label> Fecha Generación </mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker3"
+            formControlName="fechaGeneracionSemana"
+          />
+          <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+          <mat-datepicker #picker3></mat-datepicker>
+        </mat-form-field>
+  
+  
+  
+  
+      </div>
+  
+      <div
+        fxFlex="20"
+        fxFlex.xs="100"
+        fxFlex.sm="100"
+        fxLayout
+        fxLayout.xs="row"
+        fxLayoutAlign.xs="center end"
+        fxLayoutGap.xs="1px"
+        fxLayoutGap="2px"
+        fxLayoutAlign="center end"
+        fxLayout.sm="row"
+        fxLayoutAlign.sm="center end"
+        fxLayoutGap.sm="1px"
+      >
+        <button mat-flat-button type="button" color="primary" (click)="generarSemana()">
+          <mat-icon>search</mat-icon> <span>Generar</span>
+        </button>
+        <button mat-flat-button type="button" color="accent" (click)="limpiar()">
+          <span>Limpiar</span>
+        </button>
+      </div>
+    </div>
+  
+  
+  </form>
+
+
+  </mat-card-content>
+</mat-card>
+
+
+
+

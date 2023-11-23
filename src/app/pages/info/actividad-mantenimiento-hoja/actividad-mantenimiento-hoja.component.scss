@@ -1,0 +1,26 @@
+// .mat-row .mat-cell {
+//   border-bottom: 1px solid transparent;
+//   border-top: 1px solid transparent;
+//   border-color: rgb(231, 227, 227);
+//   cursor: pointer;
+// }
+
+// .mat-row:hover .mat-cell {
+//   border-color: currentColor;
+//   background-color: lightsteelblue;
+// }
+
+.selected {
+  font-weight: bold;
+  background-color: lightblue;
+}
+
+.panel-expandible{
+  margin-bottom: 10px;
+}
+
+.contenido_borde{
+  border: 1px solid;
+  border-color: lightslategrey;
+  padding: 5px;
+}

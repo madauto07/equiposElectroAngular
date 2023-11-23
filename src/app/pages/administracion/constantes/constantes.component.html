@@ -1,0 +1,314 @@
+<!-- Titulo -->
+<div fxLayout="row" class="title" fxLayoutAlign="start center">
+  <button
+    mat-mini-fab
+    color="primary"
+    aria-label="Volver"
+    (click)="irAListadoTipoConstante()"
+  >
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <div fxLayoutAlign="center center" style="width: 100%">
+    <h3 class="title">Constantes</h3>
+  </div>
+</div>
+
+<!-- Criterios de Busqueda - Filtro -->
+<mat-expansion-panel class="panel-expandible" [expanded]="true">
+  <mat-expansion-panel-header>
+    <h4 class="sub_title">Criterios de Búsqueda</h4>
+  </mat-expansion-panel-header>
+
+  <div
+    fxLayout="row"
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayoutAlign="start start"
+    fxLayoutGap="0.625rem"
+    style="width: 100%"
+  >
+    <div
+      fxLayout="column"
+      fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayoutAlign="space-between center"
+      fxLayoutAlign.xs="space-around center"
+      fxLayoutAlign.sm="space-around stretch"
+      fxLayoutGap="0.625rem"
+      fxFlex="50"
+      fxFlex.xs="100"
+      fxFlex.sm="100"
+      style="width: 100%"
+    >
+      <!-- mat-form-field -->
+      <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Tipo Constante</mat-label>
+        <input
+          matInput
+          placeholder="Perfil"
+          type="text"
+          [(ngModel)]="strNombreTipoConstante"
+          disabled="true"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Nombre</mat-label>
+        <input
+          id="filtroNombre"
+          matInput
+          placeholder="Constantes"
+          type="text"
+          [(ngModel)]="strBuscarNombre"
+        />
+      </mat-form-field>
+    </div>
+
+    <div
+      fxFlex="20"
+      fxFlex.xs="100"
+      fxFlex.sm="100"
+      fxLayout
+      fxLayout.xs="row"
+      fxLayoutAlign.xs="center end"
+      fxLayoutGap.xs="1px"
+      fxLayoutGap="2px"
+      fxLayoutAlign="center end"
+      fxLayout.sm="row"
+      fxLayoutAlign.sm="center end"
+      fxLayoutGap.sm="1px"
+    >
+      <!-- botones -->
+      <button mat-flat-button type="button" color="primary" (click)="buscar()">
+        <mat-icon>search</mat-icon> <span>Buscar</span>
+      </button>
+      <button mat-flat-button type="button" color="accent" (click)="limpiar()">
+        <span>Limpiar</span>
+      </button>
+    </div>
+  </div>
+</mat-expansion-panel>
+
+<!-- Botonera -->
+<div
+  class="botonera"
+  fxLayout
+  fxLayout.xs="column"
+  fxLayout.sm="column"
+  fxLayoutAlign="space-between center"
+  fxLayoutAlign.xs="start center"
+  fxLayoutAlign.sm="start center"
+  fxLayoutGap="4px"
+  fxLayoutGap.xs="1px"
+  fxLayoutGap.sm="1px"
+  fxFlexFill
+>
+  <div fxLayout="row" style="padding-left: 0.25rem">
+    <h4 class="sub_title">Listado de Constantes</h4>
+  </div>
+
+  <div
+    fxLayout="row"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap="4px"
+    fxLayoutGap.sm="1px"
+  >
+    <button mat-flat-button type="button" color="primary" (click)="nuevo()" [disabled]="soloLectura">
+      Agregar
+    </button>
+    <button
+      mat-flat-button
+      type="button"
+      color="accent"
+      (click)="exportarExcel()"
+    >
+    <i style="font-size: 1rem" class="fas fa-file-excel"></i>
+    <span style="text-align: center; margin-left: 2px">Excel</span>
+    </button>
+    <button
+      mat-flat-button
+      type="button"
+      color="accent"
+      (click)="exportarPDF()"
+    >
+    <i style="font-size: 1rem" class="fas fa-file-pdf"></i>
+    <span style="text-align: center; margin-left: 2px">PDF</span>
+    </button>
+  </div>
+</div>
+
+<div class="example-container mat-elevation-z8">
+  <div *ngIf="isLoadingResults" class="loading-shades">
+    <mat-spinner></mat-spinner>
+  </div>
+  <button
+      style="float: right"
+      mat-icon-button
+      aria-label="show/hide column"
+      #menuTrigger="matMenuTrigger"
+      [matMenuTriggerFor]="mainMenuButton"
+    >
+      <mat-icon>check_box</mat-icon>
+    </button>
+    <mat-menu #mainMenuButton="matMenu">
+      <span
+        fxLayout="column"
+        (click)="$event.stopPropagation()"
+        *ngFor="let columna of columnaOcultarMostrarList; index as i"
+      >
+        <mat-checkbox
+          [(ngModel)]="columna.isActive"
+          (change)="mostrarOcultarColumna(columna)"
+        >
+          {{ columna.name }}
+        </mat-checkbox>
+      </span>
+    </mat-menu>
+  <div class="example-table-container">
+    <table
+      matTableExporter
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      class="mat-elevation-z8 tableresponse"
+      cdkDropList
+      cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <ng-container matColumnDef="Id" width="10%">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.intId }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Nombre" width="70%">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+        <td mat-cell *matCellDef="let element">{{ element.strNombre }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Codigo" width="70%">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Codigo</th>
+        <td mat-cell *matCellDef="let element">{{ element.strCodigo }}</td>
+      </ng-container>
+      <ng-container matColumnDef="Valor" width="70%">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
+        <td mat-cell *matCellDef="let element">{{ element.strValor }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Estado" width="10%">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+        <td mat-cell *matCellDef="let element">
+          <ng-template
+            [ngIf]="element.intEstado === 1"
+            [ngIfElse]="userInactivo"
+          >
+            <span style="color: blue"> ACTIVO </span>
+          </ng-template>
+
+          <ng-template #userInactivo>
+            <span style="color: brown">INACTIVO</span>
+          </ng-template>
+        </td>
+      </ng-container>
+      <!-- Campos de Auditoria -->
+      <ng-container
+        matColumnDef="{{ ColumnAudit.UsuarioCreacion }}"
+        width="40%"
+      >
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          {{ ColumnAudit.UsuarioCreacion }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.strUsuarioCreacion }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="{{ ColumnAudit.FechaCreacion }}" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          {{ ColumnAudit.FechaCreacion }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.dtFechaCreacion | date: "dd/MM/YYYY hh:mm:ss aa" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="{{ ColumnAudit.IPCreacion }}" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          {{ ColumnAudit.IPCreacion }}
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.strIPCreacion }}</td>
+      </ng-container>
+      <ng-container
+        matColumnDef="{{ ColumnAudit.UsuarioModifica }}"
+        width="40%"
+      >
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          {{ ColumnAudit.UsuarioModifica }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.strUsuarioModificacion }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="{{ ColumnAudit.FechaModifica }}" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          {{ ColumnAudit.FechaModifica }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.dtFechaModificacion | date: "dd/MM/YYYY hh:mm:ss a" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="{{ ColumnAudit.IPModifica }}" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          {{ ColumnAudit.IPModifica }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.strIPModificacion }}
+        </td>
+      </ng-container>
+      <!-- Fin Campos de Auditoria -->
+      <ng-container matColumnDef="Acciones" width="5%">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center">
+          Acciones
+        </th>
+        <td mat-cell *matCellDef="let element" style="text-align: center">
+          <button
+            (click)="verSubConstante(element)"
+            class="btn btn-secondary"
+            style="margin: 5px"
+          >
+            <mat-icon>assignment</mat-icon>
+          </button>
+          <button
+            (click)="Editar(element.intId)"
+            class="btn btn-secondary"
+            style="margin: 5px"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button (click)="Eliminar(element)" class="btn btn-secondary" [disabled]="soloLectura">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+  <div *ngIf="!dataSource.data.length" style="border: solid 0px; padding: 10px">
+    <div style="text-align: center">
+      <div class="text-info">
+        <div style="color: #bdbdc4; font-size: 20px">
+          No se encontraron registros.
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-paginator
+    [pageSize]="numeroFilas"
+    [pageSizeOptions]="pageSizeOptions"
+    [showFirstLastButtons]="true"
+    [length]="cantidadRegistros"
+    (page)="handlePage($event)"
+    class="mat-elevation-z8"
+  >
+  </mat-paginator>
+</div>

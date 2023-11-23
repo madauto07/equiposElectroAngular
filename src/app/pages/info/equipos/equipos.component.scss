@@ -1,0 +1,22 @@
+:host .mat-card ::ng-deep .mat-form-field-wrapper{
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+:host ::ng-deep .mat-expansion-indicator::after {
+  color: inherit !important;
+}
+
+.mat-card{
+  border: solid 0.5px gray;
+  background-color:inherit;
+  margin-bottom: 10px;
+}
+
+.mat-expansion-panel{
+  border: solid 0.5px gray;
+}
+
+.botonera{
+  margin-bottom: 5px;
+}

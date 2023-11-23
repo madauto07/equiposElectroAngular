@@ -1,0 +1,233 @@
+
+<!-- <div *ngIf="cargando === true">
+  <mat-spinner></mat-spinner>
+</div> -->
+<h2 class="title_registro">Datos de actividades</h2>
+<form
+  [formGroup]="form"
+  (ngSubmit)="guardar()"
+  [style.fontSize.px]="getFontSize()"
+  fxLayout="column"
+  fxLayoutAlign="space-around stretch"
+>
+  <!-- Id-->
+  <div fxLayout="row">
+    <mat-form-field appearance="outline" fxFlex="20">
+      <mat-label>Id</mat-label>
+      <input
+        type="number"
+        placeholder="Id"
+        matInput
+        formControlName="id"
+        readonly
+      />
+    </mat-form-field>
+  </div>
+
+  <!-- tipo mantenimiento y objeto -->
+  <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout="row"
+    fxLayoutAlign.xs="start stretch"
+    fxLayoutAlign.sm="start stretch"
+    fxLayoutAlign="start center"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap.sm="1px"
+    fxLayoutGap="20px"
+  >
+
+  <mat-form-field appearance="outline" fxFlex>
+    <mat-label>Tipo Mantenimiento</mat-label>
+    <mat-select
+    formControlName="selectTipoMantenimiento"
+
+      (selectionChange)="selectedValueTipo($event)"
+    >
+      <mat-option *ngFor="let lista of listaTipoMantenimiento" [value]="lista.intId">
+        {{lista.strCodigo +"-"+ lista.strValor }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" fxFlex>
+    <mat-label>Objeto</mat-label>
+    <mat-select
+    formControlName="selectObjeto"
+
+      (selectionChange)="selectedValueObjeto($event)"
+    >
+      <mat-option *ngFor="let lista of listaObjeto" [value]="lista.intId">
+        {{ lista.strValor }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  </div>
+
+   <!-- N° Serie y Codigo Sitec -->
+   <div
+   fxLayout.xs="column"
+   fxLayout.sm="column"
+   fxLayout="row"
+   fxLayoutAlign.xs="start stretch"
+   fxLayoutAlign.sm="start stretch"
+   fxLayoutAlign="start center"
+   fxLayoutGap.xs="1px"
+   fxLayoutGap.sm="1px"
+   fxLayoutGap="20px"
+ >
+
+ <mat-form-field appearance="outline" fxFlex>
+   <mat-label>Parte</mat-label>
+   <mat-select
+   formControlName="selectParte"
+
+     (selectionChange)="selectedValueParte($event)"
+   >
+     <mat-option *ngFor="let lista of listaParte" [value]="lista.intId">
+       {{ lista.strValor }}
+     </mat-option>
+   </mat-select>
+ </mat-form-field>
+
+ <mat-form-field appearance="outline" fxFlex>
+   <mat-label>Sub Parte</mat-label>
+   <mat-select
+   formControlName="selectSubParte"
+
+     (selectionChange)="selectedValueSubParte($event)"
+   >
+     <mat-option *ngFor="let lista of listaSubParte" [value]="lista.intId">
+       {{ lista.strValor }}
+     </mat-option>
+   </mat-select>
+ </mat-form-field>
+
+ </div>
+
+ <!-- Descripcion -->
+ <div fxLayout="row">
+  <mat-form-field appearance="outline" fxFlex>
+    <mat-label>Titulo(*)</mat-label>
+    <input
+      id="controlTitulo"
+      type="text"
+      placeholder="Digite Titulo"
+      matInput
+      formControlName="titulo"
+    />
+  </mat-form-field>
+</div>
+
+  <!-- Tipo Equipo -->
+  <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout="row"
+    fxLayoutAlign.xs="start start"
+    fxLayoutAlign.sm="start start"
+    fxLayoutAlign="start center"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap.sm="1px"
+    fxLayoutGap="20px"
+  >
+  <mat-form-field appearance="outline" fxFlex>
+    <mat-label>Duración</mat-label>
+    <input
+      type="number"
+      placeholder="Duración"
+      matInput
+      formControlName="duracion"
+    />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" fxFlex>
+    <mat-label>Nivel Resp.</mat-label>
+    <mat-select
+    formControlName="selectNivelResp"
+
+      (selectionChange)="selectedValueNivelResp($event)"
+    >
+      <mat-option *ngFor="let lista of listaNivelResp" [value]="lista.intId">
+        {{ lista.strValor }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  </div>
+  <!-- Nivel 0 y 1 / Nivel 2 y 3 -->
+  <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout="row"
+    fxLayoutAlign.xs="start stretch"
+    fxLayoutAlign.sm="start stretch"
+    fxLayoutAlign="start center"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap.sm="1px"
+    fxLayoutGap="20px"
+  >
+
+
+  <mat-form-field appearance="outline" [style.width.%]="50"  fxFlex>
+    <mat-label>Tipo Rive</mat-label>
+    <mat-select
+    formControlName="selectTipoRive"
+
+      (selectionChange)="selectedValueTipoRive($event)"
+    >
+      <mat-option *ngFor="let lista of listaTipoRive" [value]="lista.intId">
+        {{ lista.strValor }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+
+    <mat-slide-toggle formControlName="estado" color="primary">
+      Estado
+    </mat-slide-toggle>
+
+
+
+
+
+  </div>
+
+  <div>(*)Campo obligatorio</div>
+  <!-- Estado -->
+  <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout="row"
+    fxLayoutAlign.xs="start start"
+    fxLayoutAlign.sm="start start"
+    fxLayoutAlign="start center"
+  >
+
+  </div>
+  <!-- Leyenda Campos Obligatorios   -->
+
+  <!-- Botonera -->
+  <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout
+    fxLayoutAlign.xs="space-around stretch"
+    fxLayoutAlign.sm="space-around stretch"
+    fxLayoutAlign="center end"
+    fxLayoutGap.xs="10px"
+    fxLayoutGap.sm="10px"
+    fxLayoutGap="2px"
+    fxFlexFill
+  >
+    <button mat-flat-button type="submit" color="primary" [disabled]="soloLectura">
+      <mat-icon>save</mat-icon> <span>Guardar</span>
+    </button>
+    <button mat-flat-button type="button" color="accent" (click)="cancelar()">
+      <span>Cancelar</span>
+    </button>
+  </div>
+</form>
+

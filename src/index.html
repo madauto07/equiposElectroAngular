@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ElectroPeru</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- AdminLTE -->
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="./assets/plugins/fontawesome-free/css/all.min.css"
+    />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="./assets/dist/css/adminlte.min.css" />
+  </head>
+  <body class="mat-typography hold-transition sidebar-mini">
+    <div class="wrapper">
+      <app-root></app-root>
+    </div>
+
+    <!-- jQuery -->
+    <script src="./assets/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="./assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="./assets/dist/js/adminlte.js"></script>
+    <script>
+      $(document).ready(function()
+      {
+        //$('[data-widget="sidebar-search"]').SidebarSearch('toggle');
+        $('[data-widget="treeview"]').Treeview('init');
+        $('[data-widget="sidebar-search"]').SidebarSearch('init');
+      })
+    </script>
+  </body>
+</html>

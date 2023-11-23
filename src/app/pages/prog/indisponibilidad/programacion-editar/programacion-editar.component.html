@@ -1,0 +1,247 @@
+
+
+<!--#region Titulo -->
+<h2 class="title">Editar Programación Indisponibilidad</h2>
+<!--#endregion -->
+
+<div fxLayout fxLayout.xs="row" 
+fxLayoutAlign.xs="space-around stretch" 
+fxLayoutGap.xs="1px" 
+  fxLayoutGap="2px"
+   fxLayoutAlign="space-between center" 
+  fxFlexFill fxLayout.sm="row"
+   fxLayoutAlign.sm="space-around stretch"
+  fxLayoutGap.sm="10px">
+    <div class="example-table-container" style="border:solid 1px; border-color:#00559f;">
+
+        <table class="mat-elevation-z8 tableresponse" style="border-color:#b3cce2 ;">
+            <thead style="background: #00448d; color:#fff; padding: 5px; margin-top: 5px;">
+                <th>Id</th>
+                <th>Titulo</th>
+                <th>Del</th>
+                <th>Al</th>
+            </thead>
+            <tbody style="font-size: 16px;">
+                <tr>
+                    <td>{{idProgramacion}}</td>
+                    <td>{{titulo}}</td>
+                    <td> {{fechaIni}} </td>
+                    <td>  {{fechaFin}} </td>
+                </tr>
+            </tbody>
+        </table>
+    
+    </div>
+
+ </div>
+
+
+ 
+<div class="contenedor_listado" fxLayout="column" fxLayoutGap="0.5rem">
+
+    <!--#region Tabla -->
+    <div class="example-container mat-elevation-z8">
+      <div *ngIf="isLoadingResults" class="loading-shades">
+        <mat-spinner></mat-spinner>
+      </div>
+  
+      <div class="example-table-container">
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          class="mat-elevation-z8 tableresponse"
+        >
+          <ng-container matColumnDef="id" width="10%">
+            <th mat-header-cell *matHeaderCellDef>Id</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.intId }}
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="idactividad" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Id Actividad</th>
+            <td mat-cell *matCellDef="let element">{{ element.intIdActividad }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="Actividad" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Actividad</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombreActividad }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="TipoMant" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Tipo Mant.</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombreTipoMant }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="parte" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Parte</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombreParte }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="subparte" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Sub Parte</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombreSubParte }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="ubitecnica" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Ubic. Tecnica</th>
+            <td mat-cell *matCellDef="let element">{{ element.strCodUbicacionTecnica }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="codequipo" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Cod. Equipo</th>
+            <td mat-cell *matCellDef="let element">{{ element.strCodEquipo }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="Equipo" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Equipo</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombreEquipo }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="condsistema" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Cond. Sistema</th>
+            <td mat-cell *matCellDef="let element">{{ element.intCondicionSistema }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="condequipo" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Cond. Equipo</th>
+            <td mat-cell *matCellDef="let element">{{ element.intCondicionEquipo }}</td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <div
+        *ngIf="!dataSource.data.length"
+        style="border: solid 0px; padding: 10px"
+      >
+        <div style="text-align: center">
+          <div class="text-info">
+            <div style="color: #bdbdc4; font-size: 20px">
+              No se encontraron registros.
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <mat-paginator
+        [pageSize]="numeroFilas"
+        [pageSizeOptions]="[5, 10, 15, 20, 50]"
+        [showFirstLastButtons]="true"
+        [length]="cantidadRegistros"
+        (page)="handlePage($event)"
+        class="mat-elevation-z8"
+      >
+      </mat-paginator>
+    </div>
+    <!--#endregion -->
+
+</div>
+
+<mat-card>
+  <mat-card-title color="primary">
+    <h2 class="title_registro">Editar</h2>
+  </mat-card-title>
+  <mat-card-content fxLayout>
+
+<form [formGroup]="form" 
+(ngSubmit)="Guardar()"
+fxLayout="column" 
+fxLayoutGap="20px"
+fxFlex.lt-md="100"
+fxFlex.gt-sm="70"
+> 
+
+<mat-form-field appearance="outline" fxFlex="25">
+  <mat-label>Semana</mat-label>
+  <input
+    matInput
+    placeholder="Semana"
+    type="number"
+    min="1"
+    max="60"
+    formControlName="strSemana"
+  />
+</mat-form-field>
+  <!-- fechas -->
+  <div
+  fxLayout.xs="column"
+  fxLayout.sm="column"
+  fxLayout="row"
+  fxLayoutAlign.xs="start stretch"
+  fxLayoutAlign.sm="start stretch"
+  fxLayoutAlign="space-around start"
+  fxLayoutGap.xs="1px"
+  fxLayoutGap.sm="1px"
+  fxLayoutGap="20px"
+  >
+  
+  
+  <mat-form-field appearance="outline" fxFlex>
+   <mat-label>Fecha Inicio</mat-label>
+   <input
+     matInput
+     [matDatepicker]="picker1" readonly
+     formControlName="fechaInicio"
+   />
+   <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+   <mat-datepicker #picker1 ></mat-datepicker>
+  </mat-form-field>
+  
+  <mat-form-field appearance="outline" fxFlex>
+    <mat-label>Fecha Fin</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker2"
+      formControlName="fechaFin"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+    <mat-datepicker #picker2></mat-datepicker>
+  </mat-form-field>
+  </div>
+      
+  <div fxLayout="row">
+    <mat-slide-toggle formControlName="strEstado" color="primary">
+      Estado
+    </mat-slide-toggle>
+  </div>
+
+
+  <div
+  fxLayout.lt-md="column"
+  fxLayout.gt-sm="row"
+  fxLayoutAlign.lt-md="space-around stretch"
+  fxLayoutAlign.gt-sm="start end"
+  fxLayoutGap.lt-md="0.5rem"
+  fxLayoutGap.gt-sm="1.5rem"
+  
+  >
+  <button
+  mat-flat-button
+  type="button"
+  color="primary"
+  (click)="Guardar()"
+  [disabled]="soloLectura"
+  >
+  Grabar
+  </button>
+  
+  
+  <button
+  mat-flat-button
+  type="button"
+  color="accent"
+  (click)="regresar()"
+  [disabled]="soloLectura"
+  >
+  Cancelar
+  </button>
+  
+  
+  </div>
+     </form>
+
+
+  </mat-card-content>
+</mat-card>

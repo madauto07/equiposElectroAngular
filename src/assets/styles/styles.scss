@@ -1,0 +1,236 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '~@angular/material' as mat;
+// Plus imports for other components in your app.
+@import "~@angular/material/theming";
+
+@include mat.core();
+// GAMA DE COLORES
+$m-primary-color: (
+    50 : #e0ebf3,
+    100 : #b3cce2,
+    200 : #80aacf,
+    300 : #4d88bc,
+    400 : #266fad,
+    500 : #00559f,
+    600 : #004e97,
+    700 : #00448d,
+    800 : #1A171B,
+    900 : #424242,
+    A100 : #a1bbff,
+    A200 : #6e97ff,
+    A400 : #3b72ff,
+    A700 : #2160ff,
+    contrast: (
+        50 : #000000,
+        100 : #1A171B,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+
+$m-accent-color: (
+    50 : #e7f6fc,
+    100 : #c2e9f7,
+    200 : #9adaf2,
+    300 : #71cbec,
+    400 : #52bfe8,
+    500 : #34b4e4,
+    600 : #2fade1,
+    700 : #27a4dd,
+    800 : #219cd9,
+    900 : #158cd1,
+    A100 : #ffffff,
+    A200 : #cfecff,
+    A400 : #9cd8ff,
+    A700 : #82ceff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #000000,
+        700 : #000000,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$m-warn-color: (
+    50 : #eff4fa,
+    100 : #d6e4f3,
+    200 : #bbd2eb,
+    300 : #9fbfe3,
+    400 : #8bb2dd,
+    500 : #003F70,
+    600 : #DC002E,
+    700 : #6392cd,
+    800 : #5989c7,
+    900 : #4678be,
+    A100 : #ffffff,
+    A200 : #e1edff,
+    A400 : #aecfff,
+    A700 : #95bfff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #000000,
+        800 : #000000,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+//PALETA DE COLORES
+// MODO LIGHT
+$sitecWeb-primary: mat.define-palette($m-primary-color);
+$sitecWeb-accent: mat.define-palette($m-accent-color);
+$sitecWeb-warn: mat.define-palette($m-warn-color,600);
+// MODO DARK
+$sitecWeb-dark-primary: mat.define-palette($m-primary-color,900);
+$sitecWeb-dark-accent: mat.define-palette($m-accent-color, A200, A100, A400);
+$sitecWeb-dark-warn: mat.define-palette($m-warn-color,900,A400,A700);
+
+
+//TEMA PROPIO
+//LIGHT
+$sitecWeb-light-theme: mat.define-light-theme((
+  color: (
+    primary: $sitecWeb-primary,
+    accent: $sitecWeb-accent,
+    warn: $sitecWeb-warn,
+  )
+));
+
+//DARK
+$sitecWeb-dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $sitecWeb-dark-primary,
+      accent: $sitecWeb-dark-accent,
+      warn: $sitecWeb-dark-warn,
+    ),
+  )
+);
+
+//APLICAR TEMA AL ANGULAR
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($sitecWeb-light-theme);
+
+.light-mode{
+  @include mat.all-component-colors($sitecWeb-light-theme);
+  mat-sidenav{
+    background-color:#00559f !important;
+  }
+
+  .theme-light-sidebar{
+    background-color:#00559f !important;
+  }
+
+  .theme-light-navbar{
+    background-color:#00559f !important;
+  }
+
+}
+
+.dark-mode {
+  @include mat.all-component-colors($sitecWeb-dark-theme);
+
+}
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+/********* FUENTE DEL OTRO PROYECTO***********/
+
+/*Tabla Responsive*/
+
+.example-table-container {
+  position: relative;
+  width: 100% ;
+  max-height: 100%;
+  overflow: auto;
+   margin-bottom: 10px;
+}
+
+.tableresponse{
+  width: 100% !important;
+   border-color: #158cd1;
+   border-width: 1px;
+
+}
+
+@media screen and (max-width: 950px) {
+  .tableresponse{
+   width: 1200px !important;
+ }
+}
+
+/*loading*/
+.loading-shades {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background:transparent;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.mat-progress-spinner circle, .mat-spinner circle {
+  stroke: #004f91;
+}
+
+// Clases Globales para Listado
+.title {
+  text-align: center !important;
+  font-weight: bold !important;
+}
+
+.sub_title {
+  font-weight: bold !important;
+}
+
+// Clases Globales para Registro
+
+.title_registro{
+  font-weight: bold !important;
+}
+
+.label_campo_obligatorio{
+  margin-top: 1.34375rem;
+  margin-bottom: 1.34375rem;
+}

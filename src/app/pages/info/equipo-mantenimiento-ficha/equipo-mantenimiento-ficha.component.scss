@@ -1,0 +1,13 @@
+
+.mat-expansion-panel{
+  border: solid 0.5px gray;
+  margin-bottom: 10px;
+}
+
+.sub_title{
+  font-weight: bold;
+}
+
+:host ::ng-deep .mat-expansion-indicator::after {
+  color: inherit !important;
+}

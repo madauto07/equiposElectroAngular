@@ -1,0 +1,15 @@
+export enum EPrefijo {
+  IdPrefijoG = 1,
+  IdPrefijoF0 = 2,
+  IdPrefijoF1 = 3,
+  IdPrefijoF2 = 4,
+  IdPrefijoF3 = 5,
+  IdPrefijoFN = 6,
+  IdPrefijoA0 = 7,
+  IdPrefijoA1 = 8,
+  IdPrefijoA2 = 9,
+  IdPrefijoAN = 10,
+  IdPrefijoB1 = 11,
+  IdPrefijoB2 = 12,
+  IdPrefijoBN = 16,
+}

@@ -1,0 +1,752 @@
+
+<!--#region Titulo -->
+<h2 class="title">Programación Anual de Mantenimiento </h2>
+<!--#endregion -->
+<form 
+[formGroup]="form1"
+(ngSubmit)="buscar()"
+fxLayout="column" fxLayoutGap="20px"> 
+    
+<div fxLayout fxLayout.xs="row" 
+fxLayoutAlign.xs="space-around stretch" 
+fxLayoutGap.xs="1px" 
+  fxLayoutGap="2px"
+   fxLayoutAlign="space-between center" 
+  fxFlexFill fxLayout.sm="row"
+   fxLayoutAlign.sm="space-around stretch"
+  fxLayoutGap.sm="10px">
+    <div class="example-table-container" >
+
+        
+   <!-- <mat-form-field appearance="outline" fxFlex>
+    <mat-label>Fecha Inicio</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker1" 
+      [formControl]="date"
+      formControlName="fechaInicio"
+      (change)="valuechange($event)" 
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1 
+    startView="multi-year"
+    (yearSelected)="chosenYearHandler($event)"
+    (monthSelected)="chosenMonthHandler($event, picker1)"
+    (dateInput)="addEvent($event)"
+    (change)="addEvent($event)"
+    panelClass="example-month-picker"
+    ></mat-datepicker>
+   </mat-form-field> -->
+
+
+       
+          <mat-form-field
+          appearance="outline"
+          fxFlex.xs="100"
+          fxFlex.sm="100"
+          fxFlex="30"
+          >
+          <mat-label>Año(*)</mat-label>
+          <mat-select
+          formControlName="filtroAnho"
+            [(ngModel)]="selectedAnho"
+            (selectionChange)="onAnhoChange($event.value)"
+            
+          >
+            <mat-option *ngFor="let item of anhoLista" [value]="item.intId">
+              {{ item.intId }}
+            </mat-option>
+          </mat-select>
+          </mat-form-field>
+
+
+
+    <mat-form-field
+      appearance="outline"
+      fxFlex.xs="100"
+      fxFlex.sm="100"
+      fxFlex="30"
+      *ngIf="isMesResult"
+      >
+      <mat-label>Mes(*)</mat-label>
+      <mat-select
+      formControlName="filtroMes"
+        [(ngModel)]="selectedMes"
+        (selectionChange)="onMesChange($event.value)"
+        
+      >
+        <mat-option *ngFor="let mes of mesLista" [value]="mes.id">
+          {{ mes.name }}
+        </mat-option>
+      </mat-select>
+      </mat-form-field>
+
+      <mat-form-field
+      appearance="outline"
+      fxFlex.xs="100"
+      fxFlex.sm="100"
+      fxFlex="30"
+      *ngIf="isSemanaResult"
+      >
+      <mat-label>Semana(*)</mat-label>
+      <mat-select
+      formControlName="filtroSemana"
+        [(ngModel)]="selectedSemana"
+        (selectionChange)="onSemanaChange($event.value)"
+        
+      >
+        <mat-option *ngFor="let semana of semanaLista" [value]="semana.intId">
+          {{ semana.strNombre }}
+        </mat-option>
+      </mat-select>
+      </mat-form-field>
+
+    </div>
+
+ </div>
+
+<!--#region  Criterios de Busqueda - Filtro -->
+<mat-card>
+    <mat-card-title class="sub_title"></mat-card-title>
+    <mat-card-content>
+        
+      <mat-expansion-panel class="panel-expandible" [expanded]="false">
+        <mat-expansion-panel-header>
+          <h4 class="sub_title"> Criterios de Búsqueda</h4>
+        </mat-expansion-panel-header>
+
+
+        <div
+        fxLayout.xs="column"
+        fxLayout.sm="column"
+        fxLayout="row"
+        fxLayoutGap.xs="1px"
+        fxLayoutGap.sm="2px"
+        fxLayoutGap="30px"
+        fxFill
+        fxLayoutAlign.xs="start stretch"
+        fxLayoutAlign.sm="start stretch"
+        fxLayoutAlign="space-around"
+      >
+        <div
+          fxLayout.xs="column"
+          fxLayout.sm="column"
+          fxLayout="row"
+          fxLayoutGap.xs="1px"
+          fxLayoutGap.sm="2px"
+          fxLayoutGap="30px"
+          fxLayoutAlign.xs="start stretch"
+          fxLayoutAlign.sm="start stretch"
+          fxLayoutAlign="start start"
+          fxFlex="80"
+        >
+
+        
+      
+
+
+          <mat-form-field appearance="outline" fxFlex="50">
+            <mat-label>Id Actividad</mat-label>
+            <input
+              matInput
+              placeholder="Cod. Actividad"
+              type="number"
+              formControlName="filtroCodActividad"
+              #inputFocoInicial
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex>
+            <mat-label>Equipo</mat-label>
+            <input
+              matInput
+              placeholder="Equipo"
+              type="number"
+              formControlName="filtroNombreEquipo"
+            />
+          </mat-form-field>
+        </div>
+        <div
+          fxLayout.xs="column"
+          fxLayout.sm="column"
+          fxLayout="row"
+          fxLayoutGap="5px"
+          fxLayoutAlign.xs="center stretch"
+          fxLayoutAlign.sm="center stretch"
+          fxLayoutAlign="end start"
+          fxFlex="20"
+        >
+          <button
+            mat-flat-button
+            type="button"
+            color="primary"
+            (click)="buscar()"
+          >
+            <span>Buscar</span>
+          </button>
+          <button
+            mat-flat-button
+            type="button"
+            color="accent"
+            (click)="limpiar()"
+          >
+            <span>Limpiar</span>
+          </button>
+        </div>
+      </div>
+
+      <div
+      fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayout="row"
+      fxLayoutGap.xs="1px"
+      fxLayoutGap.sm="1px"
+      fxLayoutGap="30px"
+      fxFill
+    >
+    <mat-form-field appearance="outline" fxFlex="90">
+      <mat-label>Actividad</mat-label>
+      <input
+        matInput
+        placeholder="Titulo"
+        type="text"
+        formControlName="filtroControlActividad"
+      />
+    </mat-form-field>
+  
+      <mat-form-field
+      appearance="outline"
+      fxFlex.xs="100"
+      fxFlex.sm="100"
+      fxFlex="50"
+      >
+      <mat-label>Tipo Mantenimiento(*)</mat-label>
+      <mat-select
+        formControlName="filtroSelectTipoMant"
+        [(ngModel)]="selectedTipoMant"
+        (selectionChange)="onTipoMantenimientoChange($event.value)"
+        
+      >
+        <mat-option *ngFor="let modulo of listaTipoMant" [value]="modulo.intId">
+          {{ modulo.strNombre }}
+        </mat-option>
+      </mat-select>
+      </mat-form-field>
+  
+      </div>
+      
+      <div
+      fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayout="row"
+      fxLayoutGap.xs="1px"
+      fxLayoutGap.sm="1px"
+      fxLayoutGap="30px"
+      fxFill
+    >
+      <mat-form-field appearance="outline" fxFlex="20">
+        <mat-label>Tipo</mat-label>
+        <input
+          type="text"
+          placeholder="Seleccione tipo de activo"
+          aria-label="Tipo Activo"
+          matInput
+          formControlName="filtroTipoEquipoSelectAC"
+          [matAutocomplete]="tipoActivoAutocomplete"
+        />
+        <mat-autocomplete
+          #tipoActivoAutocomplete="matAutocomplete"
+          [displayWith]="mostrarNombreTipoActivoSelect"
+        >
+          <mat-option
+            *ngFor="let tipoActivo of listaTipoActivoFiltrada | async"
+            [value]="tipoActivo"
+          >
+            {{ tipoActivo.strValor }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <div fxFlex>
+        <div fxLayout="row">
+          <mat-form-field appearance="outline" fxFlex="90">
+            <mat-label>Ubicación Técnica</mat-label>
+            <input
+              matInput
+              placeholder="Ubicacion Tecnica"
+              type="text"
+              formControlName="filtroUbicacionTecnica"
+              readonly
+            />
+          </mat-form-field>
+          <button type="button" (click)="desplegarFiltroUbicacionTecnica()" fxFlex>
+            <mat-icon>search</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div fxFlex>
+        <div fxLayout="row">
+          <mat-form-field appearance="outline" fxFlex="90">
+            <mat-label>Código del Equipo</mat-label>
+            <input
+              matInput
+              placeholder="Codigo del Equipo"
+              type="text"
+              formControlName="filtroCodigoEquipo"
+              readonly
+            />
+          </mat-form-field>
+          <button type="button" (click)="desplegarFiltroCodigoEquipo()" fxFlex>
+            <mat-icon>search</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  
+
+   
+      </mat-expansion-panel>
+
+     
+
+    </mat-card-content>
+</mat-card>
+</form> 
+
+<!--#region Botonera -->
+<div
+  class="botonera"
+  fxLayout.xs="column"
+  fxLayout.sm="column"
+  fxLayout="row"
+  fxLayoutAlign.xs="start start"
+  fxLayoutAlign.sm="start start"
+  fxLayoutAlign="space-between center"
+  fxLayoutGap.xs="1px"
+  fxLayoutGap.sm="1px"
+  fxLayoutGap="4px"
+  fxFill
+>
+  <div fxLayout="row">
+    <h4 class="sub_title">Listado de Programaciones</h4>
+  </div>
+
+  <div
+    fxLayout="row"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap="4px"
+    fxLayoutGap.sm="1px"
+  >
+
+
+<button
+mat-flat-button
+type="button"
+color="primary"
+(click)="resumen()"
+[disabled]="soloLectura"
+>
+Resumen
+</button>
+
+<button
+mat-flat-button
+type="button"
+color="accent"
+(click)="detalleExcel()"
+[disabled]="soloLectura"
+>
+Detalle
+</button>
+
+ 
+   
+  </div>
+</div>
+<!--#endregion -->
+
+
+<div class="contenedor_listado" fxLayout="column" fxLayoutGap="0.5rem">
+
+    <!--#region Tabla -->
+    <div class="example-container mat-elevation-z8">
+      <div *ngIf="isLoadingResults" class="loading-shades">
+        <mat-spinner></mat-spinner>
+      </div>
+
+
+  
+      <div class="example-container mat-elevation-z8">
+
+      <!--   <table class="mat-elevation-z8 tableresponse">
+            <thead>
+              <tr>
+                <th *ngFor="let key of tabKey">{{key}}</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let arr of tabValue"> 
+                    <td *ngFor="let val of arr">{{val}}</td>
+                </tr>
+            </tbody>
+
+        </table> -->
+
+
+
+         <table
+          mat-table
+          [dataSource]="dataSource"
+          class="mat-elevation-z8 tableresponse"
+        >
+          <!-- <ng-container matColumnDef="id" width="10%" >
+            <th mat-header-cell *matHeaderCellDef>Id</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.intId }}
+            </td>
+          </ng-container> -->
+  
+          <ng-container matColumnDef="idactividad"  >
+            <th mat-header-cell *matHeaderCellDef>Id Actividad</th>
+            <td mat-cell *matCellDef="let element">{{ element.intIdActividad }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="Actividad" >
+            <th mat-header-cell *matHeaderCellDef>Actividad</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombreActividad }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="TipoMant" >
+            <th mat-header-cell *matHeaderCellDef>Tipo Mant.</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombreTipoMant }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="parte" >
+            <th mat-header-cell *matHeaderCellDef>Parte</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombreParte }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="subparte" >
+            <th mat-header-cell *matHeaderCellDef>Sub Parte</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombreSubParte }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="ubitecnica" >
+            <th mat-header-cell *matHeaderCellDef>Ubic. Tecnica</th>
+            <td mat-cell *matCellDef="let element">{{ element.strCodUbicacionTecnica }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="codequipo" >
+            <th mat-header-cell *matHeaderCellDef>Cod. Equipo</th>
+            <td mat-cell *matCellDef="let element">{{ element.strCodEquipo }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="Equipo" >
+            <th mat-header-cell *matHeaderCellDef>Equipo</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombreEquipo }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="condsistema" >
+            <th mat-header-cell *matHeaderCellDef>Cond. Sistema</th>
+            <td mat-cell *matCellDef="let element">{{ element.intCondicionSistema }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="condequipo" >
+            <th mat-header-cell *matHeaderCellDef>Cond. Equipo</th>
+            <td mat-cell *matCellDef="let element">{{ element.intCondicionEquipo }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="1" width="10">
+            <th mat-header-cell *matHeaderCellDef>1</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_1 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="2" width="10">
+            <th mat-header-cell *matHeaderCellDef>2</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_2 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="3" width="10">
+            <th mat-header-cell *matHeaderCellDef>3</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_3 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="4" width="10">
+            <th mat-header-cell *matHeaderCellDef>4</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_4 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="5" width="10">
+            <th mat-header-cell *matHeaderCellDef>5</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_5 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="6" width="10">
+            <th mat-header-cell *matHeaderCellDef>6</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_6 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="7" width="10">
+            <th mat-header-cell *matHeaderCellDef>7</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_7 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="8" width="10">
+            <th mat-header-cell *matHeaderCellDef>8</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_8 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="9" width="10">
+            <th mat-header-cell *matHeaderCellDef>9</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_9 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="10" width="10">
+            <th mat-header-cell *matHeaderCellDef>10</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_10 }}</td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="11" width="10">
+            <th mat-header-cell *matHeaderCellDef>11</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_11 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="12" width="10">
+            <th mat-header-cell *matHeaderCellDef>12</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_12 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="13" width="10">
+            <th mat-header-cell *matHeaderCellDef>13</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_13 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="14" width="10">
+            <th mat-header-cell *matHeaderCellDef>14</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_14 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="15" width="10">
+            <th mat-header-cell *matHeaderCellDef>15</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_15 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="16" width="10">
+            <th mat-header-cell *matHeaderCellDef>16</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_16 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="17" width="10">
+            <th mat-header-cell *matHeaderCellDef>17</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_17 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="18" width="10">
+            <th mat-header-cell *matHeaderCellDef>18</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_18 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="19" width="10">
+            <th mat-header-cell *matHeaderCellDef>19</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_19 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="20" width="10">
+            <th mat-header-cell *matHeaderCellDef>20</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_20 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="21" width="10">
+            <th mat-header-cell *matHeaderCellDef>21</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_21 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="22" width="10">
+            <th mat-header-cell *matHeaderCellDef>22</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_22 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="23" width="10">
+            <th mat-header-cell *matHeaderCellDef>23</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_23 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="24" width="10">
+            <th mat-header-cell *matHeaderCellDef>24</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_24 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="25" width="10">
+            <th mat-header-cell *matHeaderCellDef>25</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_25 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="26" width="10">
+            <th mat-header-cell *matHeaderCellDef>26</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_26 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="27" width="10">
+            <th mat-header-cell *matHeaderCellDef>27</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_27 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="28" width="10">
+            <th mat-header-cell *matHeaderCellDef>28</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_28 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="29" width="10">
+            <th mat-header-cell *matHeaderCellDef>29</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_29 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="30" width="10">
+            <th mat-header-cell *matHeaderCellDef>30</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_30 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="31" width="10">
+            <th mat-header-cell *matHeaderCellDef>31</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_31 }}</td>
+          </ng-container>
+
+         
+          <ng-container matColumnDef="32" width="10">
+            <th mat-header-cell *matHeaderCellDef>32</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_32 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="33" width="10">
+            <th mat-header-cell *matHeaderCellDef>33</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_33 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="34" width="10">
+            <th mat-header-cell *matHeaderCellDef>34</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_34 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="35" width="10">
+            <th mat-header-cell *matHeaderCellDef>35</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_35 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="36" width="10">
+            <th mat-header-cell *matHeaderCellDef>36</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_36 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="37" width="10">
+            <th mat-header-cell *matHeaderCellDef>37</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_37 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="38" width="10">
+            <th mat-header-cell *matHeaderCellDef>38</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_38 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="39" width="10">
+            <th mat-header-cell *matHeaderCellDef>39</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_39 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="40" width="10">
+            <th mat-header-cell *matHeaderCellDef>40</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_40 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="41" width="10">
+            <th mat-header-cell *matHeaderCellDef>41</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_41 }}</td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="42" width="10">
+            <th mat-header-cell *matHeaderCellDef>42</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_42 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="43" width="10">
+            <th mat-header-cell *matHeaderCellDef>43</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_43 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="44" width="10">
+            <th mat-header-cell *matHeaderCellDef>44</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_44 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="45" width="10">
+            <th mat-header-cell *matHeaderCellDef>45</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_45 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="46" width="10">
+            <th mat-header-cell *matHeaderCellDef>46</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_46 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="47" width="10">
+            <th mat-header-cell *matHeaderCellDef>47</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_47 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="48" width="10">
+            <th mat-header-cell *matHeaderCellDef>48</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_48 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="49" width="10">
+            <th mat-header-cell *matHeaderCellDef>49</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_49 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="50" width="10">
+            <th mat-header-cell *matHeaderCellDef>50</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_50 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="51" width="10">
+            <th mat-header-cell *matHeaderCellDef>51</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_51 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="52" width="10">
+            <th mat-header-cell *matHeaderCellDef>52</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_52 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="53" width="10">
+            <th mat-header-cell *matHeaderCellDef>53</th>
+            <td mat-cell *matCellDef="let element">{{ element.int_53 }}</td>
+          </ng-container>
+
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table> 
+
+
+      </div>
+      <div
+        *ngIf="!array.length"
+        style="border: solid 0px; padding: 10px"
+      >
+        <div style="text-align: center">
+          <div class="text-info">
+            <div style="color: #bdbdc4; font-size: 20px">
+              No se encontraron registros.
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <mat-paginator
+        [pageSize]="numeroFilas"
+        [pageSizeOptions]="[5, 10, 15, 20, 50]"
+        [showFirstLastButtons]="true"
+        [length]="cantidadRegistros"
+        (page)="handlePage($event)"
+        class="mat-elevation-z8"
+      >
+      </mat-paginator>
+    </div>
+    <!--#endregion -->
+
+
+    
+<div
+fxLayout fxLayout.xs="row" 
+fxLayoutAlign.xs="space-around stretch" 
+fxLayoutGap.xs="1px" 
+fxLayoutGap="2px"
+fxLayoutAlign="left" 
+fxFlexFill fxLayout.sm="row"
+fxLayoutAlign.sm="space-around stretch"
+fxLayoutGap.sm="10px"
+
+>
+<button
+mat-flat-button
+type="button"
+color="primary"
+(click)="agregar()"
+[disabled]="soloLectura"
+>
+Agregar
+</button>
+
+
+<button
+mat-flat-button
+type="button"
+color="accent"
+(click)="regresar()"
+[disabled]="soloLectura"
+>
+Regresar
+</button>
+
+
+</div>
+   
+</div>
+

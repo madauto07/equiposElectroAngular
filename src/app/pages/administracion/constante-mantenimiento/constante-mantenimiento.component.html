@@ -1,0 +1,138 @@
+<button mat-mini-fab color="primary" aria-label="Volver" (click)="Cancelar()">
+  <mat-icon>arrow_back</mat-icon>
+</button>
+<div style="text-align: center"><b>Mantenimiento Constante</b></div>
+<br />
+<!--
+ -->
+<form
+  class="example-form"
+  [formGroup]="formPrincipal"
+  (ngSubmit)="Guardar()"
+  [style.fontSize.px]="getFontSize()"
+>
+  <div *ngIf="isLoadingResults" fxLayout="row" fxLayoutAlign="center">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div
+    fxLayout="column"
+    fxLayoutAlign.xs="space-around stretch"
+    fxLayoutAlign.sm="space-around stretch"
+    fxLayoutAlign="space-around start"
+    fxLayoutGap="2px"
+    fxFlexFill
+  >
+    <mat-form-field
+      appearance="outline"
+      style="width: 20%;"
+    >
+      <mat-label>ID</mat-label>
+      <input
+        type="text"
+        placeholder="Id"
+        matInput
+        maxlength="100"
+        formControlName="strId"
+        readonly
+      />
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="outline"
+      style="width: 50%;"
+    >
+      <mat-label>Nombre(*)</mat-label>
+      <input
+        type="text"
+        placeholder="Nombre"
+        matInput
+        formControlName="strNombre"
+      />
+    </mat-form-field>
+
+    <mat-form-field
+    appearance="outline"
+    style="width: 50%;"
+  >
+    <mat-label>Codigo(*)</mat-label>
+    <input
+      type="text"
+      placeholder="Codngo"
+      matInput
+      formControlName="strCodigo"
+    />
+  </mat-form-field>
+
+    <mat-form-field
+      appearance="outline"
+      style="width: 50%;"
+    >
+      <mat-label>Valor</mat-label>
+      <input
+        type="text"
+        placeholder="Digite el valor"
+        matInput
+        formControlName="strValor"
+      />
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="outline"
+      style="width: 100%;"
+    >
+      <mat-label>Descripción</mat-label>
+      <textarea
+        type="text"
+        placeholder="Digite descripción"
+        matInput
+        formControlName="strDescripcion"
+      >
+      </textarea>
+    </mat-form-field>
+  </div>
+
+  <div
+    fxLayout
+    fxLayout.xs="column"
+    fxLayoutAlign.xs="start center"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap="2px"
+    fxLayoutAlign="start center"
+    fxFlexFill
+    fxLayout.sm="column"
+    fxLayoutAlign.sm="start center"
+    fxLayoutGap.sm="1px"
+  >
+    <div style="width: 50%">
+      <mat-slide-toggle formControlName="bolEstado" color="primary">
+        Estado
+      </mat-slide-toggle>
+      <br />
+      <br />
+      <label>(*)Campo obligatorio</label>
+      <br />
+      <br />
+    </div>
+  </div>
+
+  <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout
+    fxLayoutAlign.xs="space-around stretch"
+    fxLayoutAlign.sm="space-around stretch"
+    fxLayoutAlign="center end"
+    fxLayoutGap.xs="10px"
+    fxLayoutGap.sm="10px"
+    fxLayoutGap="2px"
+    fxFlexFill
+  >
+    <button mat-flat-button type="submit" color="primary">
+      <mat-icon>save</mat-icon> <span>Guardar</span>
+    </button>
+    <button mat-flat-button type="button" color="accent" (click)="Cancelar()">
+      <span>Cancelar</span>
+    </button>
+  </div>
+</form>

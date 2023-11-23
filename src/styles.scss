@@ -1,0 +1,230 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use "~@angular/material" as mat;
+// Plus imports for other components in your app.
+@import "~@angular/material/theming";
+
+@include mat.core();
+// GAMA DE COLORES
+$m-primary-color: (
+  50: #e0ebf3,
+  100: #b3cce2,
+  200: #80aacf,
+  300: #4d88bc,
+  400: #266fad,
+  500: #00559f,
+  600: #004e97,
+  700: #00448d,
+  800: #003b83,
+  900: #002a72,
+  A100: #a1bbff,
+  A200: #6e97ff,
+  A400: #3b72ff,
+  A700: #2160ff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+$m-accent-color: (
+  50: #e7f6fc,
+  100: #c2e9f7,
+  200: #9adaf2,
+  300: #71cbec,
+  400: #52bfe8,
+  500: #34b4e4,
+  600: #2fade1,
+  700: #27a4dd,
+  800: #219cd9,
+  900: #158cd1,
+  A100: #ffffff,
+  A200: #cfecff,
+  A400: #9cd8ff,
+  A700: #82ceff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #000000,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$m-warn-color: (
+  50: #eff4fa,
+  100: #d6e4f3,
+  200: #bbd2eb,
+  300: #9fbfe3,
+  400: #8bb2dd,
+  500: #76a4d7,
+  600: #6e9cd3,
+  700: #6392cd,
+  800: #5989c7,
+  900: #4678be,
+  A100: #ffffff,
+  A200: #e1edff,
+  A400: #aecfff,
+  A700: #95bfff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #000000,
+    800: #000000,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+// MODO LIGHT
+$sitecWeb-primary: mat.define-palette(mat.$indigo-palette);
+$sitecWeb-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$sitecWeb-warn: mat.define-palette(mat.$red-palette);
+
+$sitecWeb-light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $sitecWeb-primary,
+      accent: $sitecWeb-accent,
+      warn: $sitecWeb-warn,
+    ),
+  )
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($sitecWeb-light-theme);
+
+$sitecWeb-dark-primary: mat.define-palette(mat.$indigo-palette, 300, 100, 300);
+$sitecWeb-dark-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$sitecWeb-dark-warn: mat.define-palette(mat.$red-palette);
+
+$sitecWeb-dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $sitecWeb-dark-primary,
+      accent: $sitecWeb-dark-accent,
+      warn: $sitecWeb-dark-warn,
+    ),
+  )
+);
+
+.light-mode {
+  @include mat.all-component-colors($sitecWeb-light-theme);
+}
+
+.dark-mode {
+  @include mat.all-component-colors($sitecWeb-dark-theme);
+}
+
+/* You can add global styles to this file, and also import other style files */
+
+// :root {
+//   --primary: #004f91;
+//   --light: #ffffff;
+//   --grey: #efefef;
+//   --success: #9ab016;
+//   --btn-primary:#004f91;
+//   --btn-primary-hover:#07345a;
+//   --btn-pressed:hsl(207, 66%, 17%);
+//   --btn-success: #9ab016;
+//   --btn-success-hover:#65740d;
+//   --btn-secondary: #BDBEC5;
+//   --btn-secondary-hover: #7B7A83;
+//   --text-success: #AFCA0D;
+//   --text-primary:#004f91;
+//   --text-secondary: #7B7A83;
+//   --text-red: #ef473a;
+//   --text-red-hover: #cb2d3e;
+//   /*Fuente*/
+//   --fuente:'Flama-Basic';
+// }
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+h2,
+p {
+  padding: 16px;
+}
+
+.mr-8 {
+  margin-right: 8px;
+}
+
+/********* FUENTE DEL OTRO PROYECTO***********/
+
+/*Tabla Responsive*/
+
+.example-table-container {
+  position: relative;
+  width: 100%;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.tableresponse {
+  width: 100% !important;
+}
+
+@media screen and (max-width: 950px) {
+  .tableresponse {
+    width: 1200px !important;
+  }
+}
+
+/*loading*/
+.loading-shades {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background: transparent;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-progress-spinner circle,
+.mat-spinner circle {
+  stroke: #004f91;
+}
+

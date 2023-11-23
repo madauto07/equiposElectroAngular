@@ -1,0 +1,26 @@
+:host .mat-expansion-panel ::ng-deep .mat-form-field-wrapper{
+    margin: 0 !important;
+  }
+  
+  :host ::ng-deep .mat-expansion-indicator::after {
+    color: inherit !important;
+  }
+  
+  .title{
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .sub_title{
+    font-weight: bold;
+  }
+  
+  .panel-expandible{
+    background-color:inherit;
+    margin-bottom: 10px;
+  }
+  
+  .botonera{
+    margin-bottom: 5px;
+  }
+  

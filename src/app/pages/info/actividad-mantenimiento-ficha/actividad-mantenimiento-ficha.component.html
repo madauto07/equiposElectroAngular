@@ -1,0 +1,197 @@
+<h2 class="title_registro">Ficha Tecnica de actividades</h2>
+<!-- <div *ngIf="cargando === true">
+  <mat-spinner></mat-spinner>
+</div> -->
+<form
+  [formGroup]="form"
+  (ngSubmit)="guardar()"
+  [style.fontSize.px]="getFontSize()"
+  fxLayout="column"
+  fxLayoutAlign="space-around stretch"
+>
+
+  <!-- Panel Caracteristicas del Activo -->
+  <mat-expansion-panel class="panel-expandible" [expanded]="true">
+    <mat-expansion-panel-header>
+      <h4 class="sub_title">Caracteristicas del Activo</h4>
+    </mat-expansion-panel-header>
+    <!-- Marca / Cantidad / F. Fabricacion -->
+    <div
+      fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayout="row"
+      fxLayoutAlign.xs="start stretch"
+      fxLayoutAlign.sm="start stretch"
+      fxLayoutAlign="start center"
+      fxLayoutGap.xs="1px"
+      fxLayoutGap.sm="1px"
+      fxLayoutGap="20px"
+    >
+
+
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>Versión</mat-label>
+        <input
+          type="number"
+          placeholder="Versión"
+          matInput
+          formControlName="numeroVersion"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>Fecha</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="fechaVersion"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <!-- Serie / Referencia -->
+    <div
+      fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayout="row"
+      fxLayoutAlign.xs="start stretch"
+      fxLayoutAlign.sm="start stretch"
+      fxLayoutAlign="start center"
+      fxLayoutGap.xs="1px"
+      fxLayoutGap.sm="1px"
+      fxLayoutGap="20px"
+    >
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>Hr. Inicio</mat-label>
+        <input
+        type="time"
+          placeholder="00:00"
+          formControlName="horaInicio"
+          matInput
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>Hr. fin</mat-label>
+        <input
+        type="time"
+          placeholder="hh:mm"
+          formControlName="horaFin"
+          matInput
+        />
+      </mat-form-field>
+    </div>
+    <!-- Tipo / F. Instalacion -->
+    <div
+      fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayout="row"
+      fxLayoutAlign.xs="start stretch"
+      fxLayoutAlign.sm="start stretch"
+      fxLayoutAlign="start center"
+      fxLayoutGap.xs="1px"
+      fxLayoutGap.sm="1px"
+      fxLayoutGap="20px"
+    >
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>Tipo Personal</mat-label>
+        <mat-select
+        formControlName="selectTipoPersonal"
+
+          (selectionChange)="selectedValueTipo($event)"
+        >
+          <mat-option *ngFor="let tipopersonal of listaTipoPersonal" [value]="tipopersonal.intId">
+            {{ tipopersonal.strValor }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+    </div>
+  </mat-expansion-panel>
+
+
+  <mat-expansion-panel class="panel-expandible" [expanded]="true">
+    <mat-expansion-panel-header>
+      <h4 class="sub_title">Procedimiento</h4>
+    </mat-expansion-panel-header>
+    <mat-form-field appearance="outline" fxFlex>
+      <mat-label>Procedimiento</mat-label>
+      <textarea
+        placeholder="Ingrese Procedimiento"
+        formControlName="procedimiento"
+        matInput
+        rows="10"
+      ></textarea>
+    </mat-form-field>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel class="panel-expandible" [expanded]="true">
+    <mat-expansion-panel-header>
+      <h4 class="sub_title">Procedimiento Técnico</h4>
+    </mat-expansion-panel-header>
+    <mat-form-field appearance="outline" fxFlex>
+      <mat-label>Procedimiento Técnico</mat-label>
+      <textarea
+        placeholder="Ingrese Procedimiento Técnico"
+        formControlName="procedimientoTecnico"
+        matInput
+        rows="10"
+      ></textarea>
+    </mat-form-field>
+  </mat-expansion-panel>
+
+
+  <mat-expansion-panel class="panel-expandible" [expanded]="true">
+    <mat-expansion-panel-header>
+      <h4 class="sub_title">Protección Personal</h4>
+    </mat-expansion-panel-header>
+    <mat-form-field appearance="outline" fxFlex>
+      <mat-label>Protección Personal</mat-label>
+      <textarea
+        placeholder="Ingrese Protección Personal"
+        formControlName="proteccionPersonal"
+        matInput
+        rows="10"
+      ></textarea>
+    </mat-form-field>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel class="panel-expandible" [expanded]="true">
+    <mat-expansion-panel-header>
+      <h4 class="sub_title">Prevención Operacional</h4>
+    </mat-expansion-panel-header>
+    <mat-form-field appearance="outline" fxFlex>
+      <mat-label>Prevención Operacional</mat-label>
+      <textarea
+        placeholder="Ingrese revención Operacional"
+        formControlName="prevencionOperacional"
+        matInput
+        rows="10"
+      ></textarea>
+    </mat-form-field>
+  </mat-expansion-panel>
+
+  <!-- Botonera -->
+  <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout
+    fxLayoutAlign.xs="space-around stretch"
+    fxLayoutAlign.sm="space-around stretch"
+    fxLayoutAlign="center end"
+    fxLayoutGap.xs="10px"
+    fxLayoutGap.sm="10px"
+    fxLayoutGap="2px"
+    fxFlexFill
+  >
+    <button mat-flat-button type="submit" color="primary" [disabled]="soloLectura">
+      <mat-icon>save</mat-icon> <span>Guardar</span>
+    </button>
+    <button mat-flat-button type="button" color="accent" (click)="cancelar()">
+      <span>Cancelar</span>
+    </button>
+  </div>
+</form>
+

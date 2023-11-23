@@ -1,0 +1,147 @@
+<div *ngIf="isLoadingResults" class="loading-shades">
+  <mat-spinner></mat-spinner>
+</div>
+<mat-card>
+  <mat-card-title color="primary">
+    <h2 class="title_registro">{{ titulo }}</h2>
+  </mat-card-title>
+  <mat-card-content fxLayout>
+    <form
+      [formGroup]="formPrincipal"
+      (ngSubmit)="Guardar()"
+      fxFlex.lt-md="100"
+      fxFlex.gt-sm="70"
+    >
+      <!-- Contenido -->
+      <div fxLayout="row">
+        <mat-form-field
+          appearance="outline"
+          fxFlex.lt-md="100"
+          fxFlex.gt-sm="15"
+        >
+          <mat-label>Id</mat-label>
+          <input
+            type="number"
+            placeholder="Id"
+            matInput
+            formControlName="strId"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Login</mat-label>
+          <input
+            type="text"
+            placeholder="Login"
+            matInput
+            formControlName="strLogin"
+            #inputFocoInicial
+          />
+        </mat-form-field>
+      </div>
+
+      <div
+        fxLayout.lt-md="column"
+        fxLayout.gt-sm="row"
+        fxLayoutGap.gt-sm="1rem"
+      >
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Nombres(*)</mat-label>
+          <input
+            type="text"
+            placeholder="Nombres"
+            matInput
+            formControlName="strNombres"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Apellidos</mat-label>
+          <input
+            type="text"
+            placeholder="Digite apellidos"
+            matInput
+            formControlName="strApellidos"
+          />
+        </mat-form-field>
+      </div>
+
+      <div
+        fxLayout.lt-md="column"
+        fxLayout.gt-sm="row"
+        fxLayoutGap.gt-sm="1rem"
+      >
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Código(*)</mat-label>
+          <input
+            type="text"
+            placeholder="Codigo"
+            matInput
+            formControlName="strCodigo"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Telefono</mat-label>
+          <input
+            type="text"
+            placeholder="Digite telefono"
+            matInput
+            formControlName="strTelefono"
+          />
+        </mat-form-field>
+      </div>
+      <div fxLayout="row">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Correo</mat-label>
+          <input
+            type="email"
+            placeholder="Digite correo"
+            matInput
+            formControlName="strCorreo"
+          />
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row">
+        <mat-slide-toggle formControlName="strEstado" color="primary">
+          Estado
+        </mat-slide-toggle>
+      </div>
+
+      <!-- Label Campo Obligatorio -->
+      <div class="label_campo_obligatorio">
+        <label>(*)Campo obligatorio</label>
+      </div>
+      <!-- Botonera -->
+      <div
+        fxLayout.lt-md="column"
+        fxLayout.gt-sm="row"
+        fxLayoutAlign.lt-md="space-around stretch"
+        fxLayoutAlign.gt-sm="start end"
+        fxLayoutGap.lt-md="0.5rem"
+        fxLayoutGap.gt-sm="1.5rem"
+      >
+        <button
+          mat-flat-button
+          type="submit"
+          color="primary"
+          [disabled]="soloLectura"
+        >
+          <mat-icon>save</mat-icon> <span>Guardar</span>
+        </button>
+        <button
+          mat-flat-button
+          type="button"
+          color="accent"
+          (click)="Cancelar()"
+        >
+          <span>Cancelar</span>
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

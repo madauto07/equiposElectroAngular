@@ -1,0 +1,265 @@
+<div class="contenedor_listado" fxLayout="column" fxLayoutGap="1rem">
+  <!-- Titulo -->
+  <div fxLayout="row" class="title" fxLayoutAlign="start center">
+    <button
+      mat-mini-fab
+      color="primary"
+      aria-label="Volver"
+      (click)="irAListadoPerfil()"
+    >
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div fxLayoutAlign="center center" style="width: 100%">
+      <h2 class="title">Asignar Opciones al Perfil: {{ rol.strNombre }}</h2>
+    </div>
+  </div>
+
+  <!--#region Registro Data -->
+  <div *ngIf="bolGuardandoData" style="margin-top: 10px">
+    <app-opcion-rol-mantenimiento
+      [idRol]="rol.intId"
+      [idOpcion]="idOpcion"
+      (cerrar)="ocultarComponenteRegistro($event)"
+      (listarOpcionRol)="listarOpcionRol($event)"
+    ></app-opcion-rol-mantenimiento>
+  </div>
+  <!--#endregion Registro Data -->
+
+  <!--#region Botonera -->
+  <div
+    fxLayout
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayoutAlign="space-between center"
+    fxLayoutAlign.xs="start center"
+    fxLayoutAlign.sm="start center"
+    fxLayoutGap="4px"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap.sm="1px"
+    fxFlexFill
+  >
+    <div fxLayout="row">
+      <h4 class="sub_title">Listado de Perfiles</h4>
+    </div>
+
+    <div
+      fxLayout="row"
+      fxLayoutAlign.xs="space-around left"
+      fxLayoutGap.xs="1px"
+      fxLayoutGap="4px"
+      fxLayoutAlign="left end"
+      fxLayoutAlign.sm="space-around stretch"
+      fxLayoutGap.sm="1px"
+    >
+      <button
+        mat-flat-button
+        type="button"
+        color="primary"
+        (click)="nuevo()"
+        [disabled]="soloLectura"
+      >
+        Agregar
+      </button>
+      <button
+        mat-flat-button
+        type="button"
+        color="accent"
+        (click)="exportarExcel()"
+      >
+      <i style="font-size: 1rem" class="fas fa-file-excel"></i>
+      <span style="text-align: center; margin-left: 2px">Excel</span>
+      </button>
+      <button
+        mat-flat-button
+        type="button"
+        color="accent"
+        (click)="exportarPDF()"
+      >
+      <i style="font-size: 1rem" class="fas fa-file-pdf"></i>
+      <span style="text-align: center; margin-left: 2px">PDF</span>
+      </button>
+    </div>
+  </div>
+  <!--#endregion -->
+
+  <!--#region Contenedor la tabla -->
+  <div class="example-container mat-elevation-z8">
+    <!-- Cargando -->
+    <div *ngIf="isLoadingResults" class="loading-shades">
+      <mat-spinner></mat-spinner>
+    </div>
+    <!-- Fin Cargando -->
+
+    <!-- Seleccionador de columnas -->
+    <div fxLayout="row" fxLayoutAlign="end center">
+      <button
+        style="float: right"
+        mat-icon-button
+        aria-label="show/hide column"
+        #menuTrigger="matMenuTrigger"
+        [matMenuTriggerFor]="mainMenuButton"
+      >
+        <mat-icon>check_box</mat-icon>
+      </button>
+      <mat-menu #mainMenuButton="matMenu">
+        <span
+          fxLayout="column"
+          (click)="$event.stopPropagation()"
+          *ngFor="let columna of columnaOcultarMostrarList; index as i"
+        >
+          <mat-checkbox
+            [(ngModel)]="columna.isActive"
+            (change)="mostrarOcultarColumna(columna)"
+          >
+            {{ columna.name }}
+          </mat-checkbox>
+        </span>
+      </mat-menu>
+    </div>
+    <!-- Fin Seleccionador de columnas -->
+
+    <!--Tabla -->
+    <div class="example-table-container">
+      <table
+        matTableExporter
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        class="mat-elevation-z8 tableresponse"
+        cdkDropList
+        cdkDropListOrientation="horizontal"
+        (cdkDropListDropped)="drop($event)"
+      >
+        <ng-container matColumnDef="Modulo" width="40%">
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            Modulo
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.objOpcion.objModulo.strNombre }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Opcion" width="40%">
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            Opcion
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.objOpcion.strNombre }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Acceso" width="40%">
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            Acceso
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.objTipoAcceso.strValor }}
+          </td>
+        </ng-container>
+
+        <!-- Campos de Auditoria -->
+        <ng-container matColumnDef="UsuarioCreacion" width="40%">
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            UsuarioCreacion
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.strUsuarioCreacion }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="FechaCreacion" width="40%">
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            FechaCreacion
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.dtFechaCreacion | date: "dd/MM/YYYY hh:mm:ss aa" }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="IPCreacion" width="40%">
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            IPCreacion
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.strIPCreacion }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="UsuarioModifica" width="40%">
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            UsuarioModifica
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.strUsuarioModificacion }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="FechaModifica" width="40%">
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            FechaModifica
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.dtFechaModificacion | date: "dd/MM/YYYY hh:mm:ss a" }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="IPModifica" width="40%">
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            IPModifica
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.strIPModificacion }}
+          </td>
+        </ng-container>
+        <!-- Fin Campos de Auditoria -->
+        <!-- Acciones -->
+        <ng-container matColumnDef="Acciones" width="5%">
+          <th
+            mat-header-cell
+            cdkDrag
+            *matHeaderCellDef
+            style="text-align: center"
+          >
+            Acciones
+          </th>
+          <td mat-cell *matCellDef="let element" style="text-align: center">
+            <button
+              (click)="eliminar(element)"
+              color="accent"
+              [disabled]="soloLectura"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+    <!--Fin Tabla -->
+
+    <!--Row no data -->
+    <div
+      *ngIf="!dataSource.data.length"
+      style="border: solid 0px; padding: 10px"
+    >
+      <div style="text-align: center">
+        <div class="text-info">
+          <div style="color: #bdbdc4; font-size: 20px">
+            No se encontraron registros.
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Fin Row no data -->
+
+    <!-- Paginador -->
+    <mat-paginator
+      [pageSize]="numeroFilas"
+      [pageSizeOptions]="pageSizeOptions"
+      [showFirstLastButtons]="true"
+      [length]="cantidadRegistros"
+      (page)="handlePage($event)"
+      class="mat-elevation-z8"
+    >
+    </mat-paginator>
+    <!-- Fin Paginador -->
+  </div>
+  <!--#endregion -->
+</div>

@@ -1,0 +1,283 @@
+<h2 class="title_registro">Factores de actividades</h2>
+<!--#region  Criterios de Busqueda - Filtro -->
+
+<div fxLayout="row" fxLayoutGap="10">
+    <div fxFlex="45%">
+    <p> Busqueda de factores </p>
+
+   <div class="table-container">
+    <div class="example-table-container">
+        <button mat-icon-button color="primary" tooltip="Actualizar"
+        (click)="NuevoFactor()" style="cursor: pointer;">
+        <mat-icon >library_add</mat-icon>
+    </button>
+  
+    <mat-form-field appearance="standard">
+        <mat-label>Filtrar</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Buscar" #input>
+      </mat-form-field>
+
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tableresponse">
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                  <mat-checkbox (change)="$event ? masterToggle() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                [aria-label]="checkboxLabel()">
+                  </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                  <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null"
+                                [checked]="selection.isSelected(row)"
+                                [aria-label]="checkboxLabel(row)">
+                  </mat-checkbox>
+                </td>
+              </ng-container>
+
+           
+            <ng-container matColumnDef="nombre" width="70%">
+                <th mat-header-cell *matHeaderCellDef> Factor de Verificación </th>
+                <td mat-cell *matCellDef="let element"> {{ element.strNombre }} </td>
+            </ng-container>
+           
+            <ng-container matColumnDef="parte" width="20%">
+                <th mat-header-cell *matHeaderCellDef> Parte </th>
+                <td mat-cell *matCellDef="let element"> {{ element.strParte }} </td>
+            </ng-container>
+           
+            <ng-container matColumnDef="ponderacion" width="10%">
+                <th mat-header-cell *matHeaderCellDef> Pond. </th>
+                <td mat-cell *matCellDef="let element"> {{ element.intPonderacion }} </td>
+            </ng-container>
+           
+
+            <ng-container matColumnDef="acciones" width="5%" >
+                <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Acciones </th>
+                
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> 
+                    <button (click)="EditarFactor(element.intId)"  style="margin: 5px;"> <mat-icon>edit</mat-icon> </button> 
+                    <button (click)="ElminarFactor(element.intId)"><mat-icon>delete</mat-icon></button> </td>
+            </ng-container>
+           
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row
+            (click)="clickedRowsset(row)"
+            [class.demo-row-is-clicked]="clickedRows.has(row)"
+            *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+    <div *ngIf="!dataSource.data.length" style="border: solid 0px;padding: 10px;">
+        <div style="text-align: center;">
+            <div class="text-info">
+                <div style="color:#BDBDC4; font-size: 20px;">No se encontraron registros.</div>
+            </div>
+        </div>
+    </div>
+
+    <ul>
+        <li *ngFor="let clickedRow of clickedRows">
+          Clicked on {{clickedRow.strNombre}}
+        </li>
+      </ul>
+
+</div>
+
+
+    </div>
+    <div fxFlex="10%" fxLayoutAlign="space-around center" >
+
+        <div  fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="space-between center" >
+
+         
+        <button mat-icon-button color="primary" tooltip="Quitar factor "
+        (click)="desAsignarFactor()" style="cursor: pointer;">
+        <mat-icon >arrow_circle_left</mat-icon>
+        </button>
+
+        <button mat-icon-button color="primary" tooltip="Asignar factor"
+        (click)="asignarFactor()" style="cursor: pointer; ">
+        <mat-icon >arrow_circle_right</mat-icon>
+    </button>
+
+
+          
+        </div>
+    </div>
+
+    <div fxFlex="45%">
+        <p> Factores asignados </p>
+        <div class="table-container">
+            <div class="example-table-container">
+            <button mat-icon-button color="primary" 
+                style="cursor: pointer; "  >
+                <mat-icon >done</mat-icon>
+            </button>
+        
+                <table mat-table [dataSource]="dataSourceFA" class="mat-elevation-z8 tableresponse">
+                   
+                    <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+                          <mat-checkbox (change)="$event ? masterToggleFA() : null"
+                                        [checked]="selection.hasValue() && isAllSelectedFA()"
+                                        [indeterminate]="selectionFA.hasValue() && !isAllSelectedFA()"
+                                        [aria-label]="checkboxLabelFA()">
+                          </mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                          <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="$event ? selectionFA.toggle(row) : null"
+                                        [checked]="selectionFA.isSelected(row)"
+                                        [aria-label]="checkboxLabelFA(row)">
+                          </mat-checkbox>
+                        </td>
+                      </ng-container>
+        
+                   
+                    <ng-container matColumnDef="nombre" width="70%">
+                        <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                        <td mat-cell *matCellDef="let element"> {{ element.objFactorVerificacion.strNombre }} </td>
+                    </ng-container>
+                   
+                    <ng-container matColumnDef="parte" width="70%">
+                        <th mat-header-cell *matHeaderCellDef> Parte </th>
+                        <td mat-cell *matCellDef="let element"> {{ element.objFactorVerificacion.strParte }} </td>
+                    </ng-container>
+                   
+                    <ng-container matColumnDef="ponderacion" width="70%">
+                        <th mat-header-cell *matHeaderCellDef> Ponderación </th>
+                        <td mat-cell *matCellDef="let element"> {{ element.objFactorVerificacion.intPonderacion }} </td>
+                    </ng-container>
+                   
+        
+                   
+                   
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsFA"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsFA;"></tr>
+                </table>
+            </div>
+            <div *ngIf="!dataSourceFA.data.length" style="border: solid 0px;padding: 10px;">
+                <div style="text-align: center;">
+                    <div class="text-info">
+                        <div style="color:#BDBDC4; font-size: 20px;">No se encontraron registros.</div>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+  
+      </div>
+  </div>
+
+
+  <div fxLayout="row" fxLayoutGap="10">
+    <div fxFlex="45%">
+
+
+          
+              <div
+              fxLayout.xs="column"
+              fxLayout.xl="column"
+              fxLayout.sm="column"
+              fxLayout="column"
+              fxLayoutGap.xs="1px"
+              fxLayoutGap.sm="2px"
+              fxLayoutGap="10px"
+              fxFill
+              fxLayoutAlign.xs="start stretch"
+              fxLayoutAlign.sm="start stretch"
+              fxLayoutAlign="space-around"
+            >
+          
+            <p>  
+                <button mat-icon-button color="primary" tooltip="Actualizar"
+              (click)="NuevoModo()" style="cursor: pointer;">
+              <mat-icon >library_add</mat-icon>
+              </button> <span> Factor Seleccionado :  {{factortitulo}}</span> </p>
+
+              <div class="example-table-container">
+                  <table mat-table [dataSource]="dataSourceMV" class="mat-elevation-z8 tableresponse">
+                             
+                      <ng-container matColumnDef="select">
+                          <th mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggleFA() : null"
+                                          [checked]="selection.hasValue() && isAllSelectedFA()"
+                                          [indeterminate]="selectionFA.hasValue() && !isAllSelectedFA()"
+                                          [aria-label]="checkboxLabelFA()">
+                            </mat-checkbox>
+                          </th>
+                          <td mat-cell *matCellDef="let row">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                          (change)="$event ? selectionFA.toggle(row) : null"
+                                          [checked]="selectionFA.isSelected(row)"
+                                          [aria-label]="checkboxLabelFA(row)">
+                            </mat-checkbox>
+                          </td>
+                        </ng-container>
+          
+                     
+                      <ng-container matColumnDef="valor" width="70%">
+                          <th mat-header-cell *matHeaderCellDef> Valor </th>
+                          <td mat-cell *matCellDef="let element"> {{ element.strValor }} </td>
+                      </ng-container>
+                     
+                      <ng-container matColumnDef="nombre" width="70%">
+                          <th mat-header-cell *matHeaderCellDef> Modo de Verificación </th>
+                          <td mat-cell *matCellDef="let element"> {{ element.strNombre }} </td>
+                      </ng-container>
+                     
+                      <ng-container matColumnDef="eval" width="70%">
+                          <th mat-header-cell *matHeaderCellDef> Eval.(%) </th>
+                          <td mat-cell *matCellDef="let element"> {{ element.intEvaluacion }} </td>
+                      </ng-container>
+          
+                      <ng-container matColumnDef="acciones" width="5%" >
+                          <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Acciones </th>
+                          
+                          <td mat-cell *matCellDef="let element" style="text-align: center;"> 
+                              <button (click)="EditarModo(element.intId)"  style="margin: 5px;"> <mat-icon>edit</mat-icon> </button> 
+                              <button (click)="ElminarModo(element.intId)"><mat-icon>delete</mat-icon></button> </td>
+                      </ng-container>
+                     
+          
+                     
+                     
+                      <tr mat-header-row *matHeaderRowDef="displayedColumnsMV"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumnsMV;"></tr>
+                  </table>
+              </div>
+          
+              <div *ngIf="!dataSourceMV.data.length" style="border: solid 0px;padding: 10px;">
+                  <div style="text-align: center;">
+                      <div class="text-info">
+                          <div style="color:#BDBDC4; font-size: 20px;">No se encontraron registros.</div>
+                      </div>
+                  </div>
+              </div>
+          
+          
+          </div>
+          
+          
+          
+         
+
+    </div>
+  
+</div>
+
+
+
+
+  <div fxLayout="row"  fxLayoutAlign.xs="space-around right" fxLayoutGap.xs="1px" fxLayoutGap="4px"
+  fxLayoutAlign="right end"  fxLayoutAlign.sm="space-around stretch"
+  fxLayoutGap.sm="1px">
+
+    <div fxFlex="50%" fxLayoutAlign="space-around center" >
+
+      
+    </div>
+
+    
+  </div>
+

@@ -1,0 +1,19 @@
+
+:host .mat-expansion-panel .panel_busqueda ::ng-deep .mat-form-field-wrapper{
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+:host ::ng-deep .mat-expansion-indicator::after {
+  color: inherit !important;
+}
+
+.sub_title{
+  font-size: 15px !important;
+  font-weight: bold;
+}
+
+.mat-expansion-panel{
+  border: solid 0.5px gray;
+  margin-bottom: 10px;
+}

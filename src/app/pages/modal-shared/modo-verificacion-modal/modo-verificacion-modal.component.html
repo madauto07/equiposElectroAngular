@@ -1,0 +1,116 @@
+<h1 mat-dialog-title>{{ displayTitulo }}</h1>
+<div mat-dialog-content [formGroup]="formModo" #frmcarga="ngForm">
+  <div
+    fxLayout
+    fxLayout.xs="row"
+    fxLayoutAlign.xs="space-around stretch"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap="2px"
+    fxLayoutAlign="space-between center"
+    fxFlexFill
+    fxLayout.sm="row"
+    fxLayoutAlign.sm="space-around stretch"
+    fxLayoutGap.sm="10px"
+  >
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Codigo(*)</mat-label>
+      <input
+        type="text"
+        placeholder="BP"
+        matInput
+        formControlName="codigoMV"
+        readonly
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Nombre(*)</mat-label>
+      <input
+        type="text"
+        placeholder="Nombre"
+        matInput
+        formControlName="nombre"
+      />
+    </mat-form-field>
+  </div>
+
+  <div
+    fxLayout
+    fxLayout.xs="row"
+    fxLayoutAlign.xs="space-around stretch"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap="2px"
+    fxLayoutAlign="space-between center"
+    fxFlexFill
+    fxLayout.sm="row"
+    fxLayoutAlign.sm="space-around stretch"
+    fxLayoutGap.sm="10px"
+  >
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Valor(*)</mat-label>
+      <input
+        type="number"
+        placeholder="Valor"
+        matInput
+        formControlName="valor"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Evaluación(*)</mat-label>
+      <input
+        type="number"
+        placeholder="Evaluación"
+        matInput
+        formControlName="evaluacion"
+      />
+    </mat-form-field>
+  </div>
+
+  <div
+    fxLayout
+    fxLayout.xs="column"
+    fxLayoutAlign.xs="space-around stretch"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap="2px"
+    fxLayoutAlign="space-between center"
+    fxFlexFill
+    fxLayout.sm="row"
+    fxLayoutAlign.sm="space-around stretch"
+    fxLayoutGap.sm="10px"
+  ></div>
+  <div><p>(*)Campos Obligatorios</p></div>
+
+  <div
+    fxLayout
+    fxLayout.xs="column"
+    fxLayoutAlign.xs="space-around stretch"
+    fxLayoutGap.xs="10px"
+    fxLayoutGap="2px"
+    fxLayoutAlign="space-evenly center"
+    fxFlexFill
+    fxLayout.sm="column"
+    fxLayoutAlign.sm="space-around stretch"
+    fxLayoutGap.sm="10px"
+  >
+    <button
+      mat-flat-button
+      type="submit"
+      color="primary"
+      style="width: 100%"
+      (click)="Grabar()"
+      [disabled]="soloLectura"
+    >
+      <mat-icon>save</mat-icon> <span>Grabar</span>
+    </button>
+
+    <button
+      mat-flat-button
+      type="button"
+      color="accent"
+      style="width: 100%"
+      (click)="Cancelar()"
+    >
+      <mat-icon>undo icon</mat-icon> <span>Cancelar</span>
+    </button>
+  </div>
+</div>

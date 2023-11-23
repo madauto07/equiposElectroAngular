@@ -1,0 +1,110 @@
+<mat-toolbar style="width: 100%">
+  <h2 style="color: #00559f; padding: 10px; text-align: center">login</h2>
+</mat-toolbar>
+<div class="example-container">
+  <section>
+    <div
+      fxLayout
+      fxLayout.xs="column"
+      fxLayoutAlign.xs="space-between center"
+      fxLayout.sm="column"
+      fxLayoutAlign.sm="space-between center"
+      fxLayoutGap.xs="10px"
+      fxLayoutGap="2px"
+      fxLayoutAlign="space-between start"
+      fxFlexFill
+    >
+      <div fxFlex fxFlex.xs="100">
+        <mat-card>
+          <mat-card-content>
+            <img
+              src="assets/img/u18.png"
+              width="100"
+              style="margin-left: 10px; cursor: pointer"
+            />
+            <h1>SITEC.WEB</h1>
+            <form
+              class="example-form"
+              [formGroup]="frm"
+              #formLogin="ngForm"
+              (ngSubmit)="Login()"
+            >
+              <mat-form-field appearance="outline" style="width: 100%">
+                <mat-label>Usuario</mat-label>
+                <input
+                  matInput
+                  placeholder="Usuario"
+                  type="text"
+                  formControlName="Username"
+                />
+                <mat-error *ngIf="hasError('Username', 'required')">
+                  Debe ingresar su usuario
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" style="width: 100%">
+                <mat-label>Password</mat-label>
+                <input
+                  matInput
+                  placeholder="Password"
+                  [type]="hide ? 'password' : 'text'"
+                  formControlName="Password"
+                />
+                <button
+                  mat-icon-button
+                  type="button"
+                  matSuffix
+                  (click)="hide = !hide"
+                  [attr.aria-label]="'Hide password'"
+                  [attr.aria-pressed]="hide"
+                >
+                  <mat-icon>{{
+                    hide ? "visibility_off" : "visibility"
+                  }}</mat-icon>
+                </button>
+                <mat-error *ngIf="hasError('Password', 'required')">
+                  Debe ingresar su contraseña
+                </mat-error>
+              </mat-form-field>
+              <section style="text-align: center">
+                <div style="text-align: center"></div>
+              </section>
+              <br />
+              <section>
+                <div class="example-button-row">
+                  <button
+                    mat-raised-button
+                    type="submit"
+                    style="
+                      background-color: #004f91;
+                      color: #ffffff;
+                      width: 100%;
+                    "
+                    matSuffix
+                    [disabled]="!formLogin.valid"
+                  >
+                    <mat-icon>person</mat-icon> <span>Ingresar</span>
+                  </button>
+                </div>
+              </section>
+            </form>
+            <div
+              fxLayout
+              fxLayout.xs="column"
+              fxLayoutAlign.xs="center center"
+              fxLayout.sm="column"
+              fxLayoutAlign.sm="center center"
+              fxLayoutGap.xs="10px"
+              fxLayoutGap="2px"
+              fxLayoutAlign="center end"
+              fxFlexFill
+            >
+              <div *ngIf="isLoadingResults">
+                <mat-spinner></mat-spinner>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </section>
+</div>

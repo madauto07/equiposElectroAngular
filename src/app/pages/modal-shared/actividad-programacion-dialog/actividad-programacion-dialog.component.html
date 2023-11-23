@@ -1,0 +1,250 @@
+
+<h1 mat-dialog-title>{{displayTitulo}}</h1>
+
+<div mat-dialog-content [formGroup]="form" #frmcarga="ngForm" style="border-color: darkgrey; border-width: 1px;" >
+  <h4>Datos del Activo:</h4>
+  <div fxLayout fxLayout.xs="row" fxLayoutAlign.xs="space-around stretch" fxLayoutGap.xs="1px" 
+  fxLayoutGap="2px" fxLayoutAlign="space-between center" 
+  fxFlexFill fxLayout.sm="row" fxLayoutAlign.sm="space-around stretch"
+  fxLayoutGap.sm="10px">
+
+  <div class="example-table-container" style="border:solid 1px; border-color:#00559f;">
+  <table class="mat-elevation-z8 tableresponse" style="border-color:#b3cce2 ;">
+    <thead  style="background: #00448d; color:#fff; padding: 5px; margin-top: 5px;">
+      <th style="text-align: left;">Id</th>
+      <th style="text-align: left;">Tipo Activo</th>
+      <th style="text-align: left;">Codigo KKS</th>
+      <th style="text-align: left;">Descripción</th>
+      <th style="text-align: left;">Nr. Serie</th>
+      <th style="text-align: left;">Marca</th>
+      <th style="text-align: left;">Modelo</th>
+
+    </thead>
+    <tbody style="background:#b3cce2;">
+      <tr>
+        <td>{{intDatoActivoId}}</td>
+        <td>{{strDatoActivoTipo}}</td>
+        <td>{{strDatoActivoKKS}}</td>
+        <td>{{strDatoActivoDescripcion}}</td>
+        <td>{{strDatoActivoNserie}}</td>
+        <td>{{strDatoActivoMarca}}</td>
+        <td>{{strDatoActivoModelo}}</td>
+      </tr>
+    </tbody>
+    
+  </table>
+
+  </div>
+
+
+  </div>
+
+    <div fxLayout fxLayout.xs="row" fxLayoutAlign.xs="space-around stretch" fxLayoutGap.xs="1px" 
+  fxLayoutGap="2px" fxLayoutAlign="center stretch" 
+  fxFlexFill fxLayout.sm="row" fxLayoutAlign.sm="space-around stretch"
+  fxLayoutGap.sm="10px">
+
+  <mat-slide-toggle formControlName="controlCondicionSistema" color = "primary">
+    Condición Sistema
+</mat-slide-toggle>
+
+<mat-slide-toggle formControlName="controlCondicionEquipo" color = "primary">
+  Condición Equipo
+</mat-slide-toggle>
+
+<button mat-raised-button type="submit" color="accent" (click)="ActualizarEstados()" >Actualizar estados</button>
+
+  </div> 
+
+  <h4>Nuevo Registro:</h4>
+
+  <div fxLayout fxLayout.xs="row" fxLayoutAlign.xs="space-around stretch" fxLayoutGap.xs="1px" 
+      fxLayoutGap="2px" fxLayoutAlign="space-between center" 
+      fxFlexFill fxLayout.sm="row" fxLayoutAlign.sm="space-around stretch"
+      fxLayoutGap.sm="10px">
+      <mat-form-field appearance="outline" style="width: 50%;" >
+          <mat-label>Codigo(*)</mat-label>
+          <input type="text" placeholder="BP" matInput formControlName="controlCodigo" readonly> 
+      </mat-form-field>
+    
+      <!-- tipo frecuencia -->
+      <mat-form-field  appearance="outline"   style="width: 50%;" >
+      <mat-label>Tipo de frecuencia(*)</mat-label>
+      <mat-select
+        formControlName="tipoFrecuenciaSelect"
+        (selectionChange)="selectedValueTipo($event)"
+      >
+        <mat-option *ngFor="let dato of listaconstante" [value]="dato.intId">
+          {{ dato.strNombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" fxFlex>
+      <mat-label>Fecha inicio</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        formControlName="controlFechaInic"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+  
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Fecha Fin</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker2"
+            formControlName="controlFechaFin"
+          />
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+
+    
+
+  </div>
+
+  <div fxLayout fxLayout.xs="row" fxLayoutAlign.xs="space-around stretch" fxLayoutGap.xs="1px" 
+      fxLayoutGap="2px" fxLayoutAlign="space-between center" 
+      fxFlexFill fxLayout.sm="row" fxLayoutAlign.sm="space-around stretch"
+      fxLayoutGap.sm="10px">
+     
+        <!-- Modulo -->
+        <mat-form-field appearance="outline" style="width: 25%">
+          <mat-label>Frecuencia</mat-label>
+          <input
+            type="number"
+            placeholder=""
+            aria-label="Frecuencia"
+            matInput
+            formControlName="controlFrecuencia"
+          />
+        </mat-form-field>
+
+         <!-- Modulo -->
+         <mat-form-field appearance="outline" style="width: 75%">
+          <mat-label>Motivo</mat-label>
+          <input
+            type="text"
+            placeholder=""
+            aria-label="Motivo"
+            matInput
+            formControlName="controlMotivo"
+          />
+        </mat-form-field>
+
+
+  </div>
+
+   <!-- <div><p>(*)Campos Obligatorios</p></div> -->
+
+  <div fxLayout fxLayout.xs="column" fxLayoutAlign.xs="space-around stretch" 
+      fxLayoutGap.xs="10px" 
+      fxLayoutGap="2px"
+      fxLayoutAlign="space-evenly center" 
+      fxFlexFill fxLayout.sm="column"
+      fxLayoutAlign.sm="space-around stretch"
+      fxLayoutGap.sm="10px">
+
+      <button mat-flat-button type="submit"  color="primary"  style="width: 100%;" (click)="Grabar()">
+          <mat-icon>save</mat-icon> <span>Grabar</span>
+      </button>
+      <button mat-flat-button type="button" color="accent" style="width: 100%;" (click)="ocultarComponente()">
+          <mat-icon>undo icon</mat-icon> <span>Cancelar</span>
+      </button>
+      
+  </div>
+
+  <h4>Listado de Programación:</h4>
+  <button mat-icon-button color="primary" tooltip="Nuevo"
+  (click)="NuevoProgramacion()" style="cursor: pointer;">
+  <mat-icon >library_add</mat-icon>
+</button>
+
+  <div fxLayout fxLayout.xs="row" fxLayoutAlign.xs="space-around stretch" fxLayoutGap.xs="1px" 
+  fxLayoutGap="2px" fxLayoutAlign="space-between center" 
+  fxFlexFill fxLayout.sm="row" fxLayoutAlign.sm="space-around stretch"
+  fxLayoutGap.sm="10px">
+   <!-- LISTADO -->
+   <div class="example-table-container">
+     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tableresponse1" >
+        
+       <ng-container matColumnDef="id" width="10%">
+             <th mat-header-cell *matHeaderCellDef>Id </th>
+             <td mat-cell *matCellDef="let element">{{ element.intId }} </td>
+       </ng-container>
+        
+         <ng-container matColumnDef="tipo" width="70%">
+             <th mat-header-cell *matHeaderCellDef> Tipo de Frecuencia </th>
+             <td mat-cell *matCellDef="let element"> {{ element.objTipoFrecuencia.strValor }} </td>
+         </ng-container>
+        
+         <ng-container matColumnDef="frecuencia" width="70%">
+           <th mat-header-cell *matHeaderCellDef> Frecuencia </th>
+           <td mat-cell *matCellDef="let element"> {{ element.intFrecuencia }} </td>
+         </ng-container>
+
+       <ng-container matColumnDef="inicio" width="70%">
+         <th mat-header-cell *matHeaderCellDef> Inicio </th>
+         <td mat-cell *matCellDef="let element"> {{ element.dtFechaInicio | date: "dd/MM/YYYY" }}  </td>
+       </ng-container>
+
+     <ng-container matColumnDef="fin" width="70%">
+       <th mat-header-cell *matHeaderCellDef> Fin </th>
+       <td mat-cell *matCellDef="let element"> {{ element.dtFechaFin | date: "dd/MM/YYYY" }}  </td>
+   </ng-container>
+
+   <ng-container matColumnDef="motivo" width="70%">
+     <th mat-header-cell *matHeaderCellDef> Motivo </th>
+     <td mat-cell *matCellDef="let element"> {{ element.strMotivo }} </td>
+ </ng-container>
+
+         <ng-container matColumnDef="accion" width="5%" >
+             <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Acciones </th>
+             
+             <td mat-cell *matCellDef="let element" style="text-align: center;"> 
+              <button
+              (click)="editar(element)"
+              class="btn btn-secondary"
+              style="margin: 5px"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+                
+              <button (click)="Elminar(element)" class="btn btn-secondary"
+              style="margin: 5px"><mat-icon>delete</mat-icon></button> </td>
+         </ng-container>
+        
+         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+     </table>
+ </div>
+ <div *ngIf="!dataSource.data.length" style="border: solid 0px;padding: 10px;">
+     <div style="text-align: center;">
+         <div class="text-info">
+             <div style="color:#BDBDC4; font-size: 20px;">No se encontraron registros.</div>
+         </div>
+     </div>
+ </div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+    
+
+
+      
+
+
+

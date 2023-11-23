@@ -1,0 +1,130 @@
+
+<div *ngIf="isLoading" class="loading-shades">
+    <mat-spinner></mat-spinner>
+  </div>
+  <form
+    [formGroup]="form"
+    (ngSubmit)="guardar($event)"
+    [style.fontSize.px]="getFontSize()"
+  >
+    <mat-card>
+      <mat-card-title>
+        <h4 class="sub_title" *ngIf="idDatos === 0" style="margin: 0; font-size: 15px">
+          Registrar
+        </h4>
+        <h4 class="sub_title" *ngIf="idDatos > 0" style="margin: 0; font-size: 15px">
+          Editar
+        </h4>
+      </mat-card-title>
+      <mat-card-content
+        style="width: 100%"
+        fxLayout.xs="column"
+        fxLayout.sm="column"
+        fxLayout="row"
+        fxLayoutAlign="start start"
+        fxLayoutGap="10px"
+      >
+        <div fxLayout.xs="row"
+        fxLayout.sm="row"
+        fxLayout="column"
+        fxLayoutGap="10px">
+          <!-- Modulo -->
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-label>Codigo</mat-label>
+            <input
+              type="text"
+              placeholder=""
+              aria-label="codigo"
+              matInput
+              formControlName="controlCodigo"
+
+            />
+
+          </mat-form-field>
+
+            <!-- Superior -->
+            <mat-form-field
+            appearance="outline"
+            fxFlex.xs="100"
+            fxFlex.sm="100"
+            fxFlex="70"
+          >
+            <mat-label>Superior(*)</mat-label>
+            <mat-select
+              formControlName="superiorSelect"
+              [disabled]="isDisable"
+
+            >
+              <mat-option *ngFor="let dato of listaDatos" [value]="dato.intId">
+               {{dato.strCodigo}} <span>- </span> {{ dato.strNombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+
+
+
+        </div>
+
+        <div  fxLayout.xs="row"
+        fxLayout.sm="row"
+        fxLayout="column"
+        fxLayoutGap="10px">
+
+
+        <mat-form-field appearance="outline" style="width: 100%">
+          <mat-label>Valor</mat-label>
+          <input
+            type="text"
+            placeholder="Valor"
+            aria-label="valor"
+            matInput
+            formControlName="controlValor"
+
+          />
+
+        </mat-form-field>
+
+          <!-- Valor -->
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-label>Codigo C.</mat-label>
+            <input
+              type="text"
+              placeholder="Codigo C."
+              aria-label="Codigo C."
+              matInput
+              formControlName="controlCocoes"
+
+            />
+
+          </mat-form-field>
+         <!-- Valor -->
+
+
+         <mat-slide-toggle formControlName="controlEstado" color = "primary">
+           Estado
+       </mat-slide-toggle>
+
+        </div>
+        <div
+          fxLayout.xs="row"
+          fxLayout.sm="row"
+          fxLayout="column"
+          fxLayoutGap="10px"
+        >
+          <button mat-flat-button type="submit" color="primary" [disabled]="soloLectura">
+            Guardar
+          </button>
+          <button
+            (click)="ocultarComponente()"
+            mat-flat-button
+            type="button"
+            color="accent"
+          >
+            Cancelar
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </form>
+

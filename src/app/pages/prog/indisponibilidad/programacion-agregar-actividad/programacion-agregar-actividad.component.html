@@ -1,0 +1,354 @@
+
+  <h4 class="title">Agregar Actividad de Indisponibilidad</h4>
+
+
+  <div
+  fxLayout.xs="column"
+  fxLayout.sm="column"
+  fxLayout="row"
+  fxLayoutAlign.xs="start stretch"
+  fxLayoutAlign.sm="start stretch"
+  fxLayoutAlign="start center"
+  fxLayoutGap.xs="1px"
+  fxLayoutGap.sm="1px"
+  fxLayoutGap="20px" 
+>
+<mat-form-field appearance="outline" fxFlex="20">
+  <mat-label>Semana</mat-label>
+  <input
+    type="text"
+    placeholder="Semana"
+    matInput
+    [(ngModel)]="textSemana"
+   
+  />
+</mat-form-field>
+
+  </div>
+
+  <div
+  fxLayout.xs="column"
+  fxLayout.sm="column"
+  fxLayout="row"
+  fxLayoutAlign.xs="start stretch"
+  fxLayoutAlign.sm="start stretch"
+  fxLayoutAlign="start center"
+  fxLayoutGap.xs="1px"
+  fxLayoutGap.sm="1px"
+  fxLayoutGap="20px"
+>
+
+<mat-form-field appearance="outline" fxFlex>
+    <mat-label>Actividad</mat-label>
+    <input
+      type="text"
+      placeholder="Actividad"
+      matInput
+      [(ngModel)]="textActividad"
+     
+    />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" fxFlex>
+    <mat-label>Descripción</mat-label>
+    <input
+      type="text"
+      placeholder="Descripción"
+      matInput
+      [(ngModel)]="textDescripcion"
+     
+    />
+  </mat-form-field>
+
+  </div>
+
+  <div
+  fxLayout.xs="column"
+  fxLayout.sm="column"
+  fxLayout="row"
+  fxLayoutAlign.xs="start stretch"
+  fxLayoutAlign.sm="start stretch"
+  fxLayoutAlign="start center"
+  fxLayoutGap.xs="1px"
+  fxLayoutGap.sm="1px"
+  fxLayoutGap="20px"
+>
+
+<mat-form-field appearance="outline" fxFlex>
+  <mat-label>Fecha Inicio</mat-label>
+  <input
+    matInput
+    [matDatepicker]="picker1"
+    [(ngModel)]="fechaInicio"
+  />
+  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+  <mat-datepicker #picker1></mat-datepicker>
+</mat-form-field>
+
+<mat-form-field appearance="outline" fxFlex>
+  <mat-label>Fecha Fin</mat-label>
+  <input
+    matInput
+    [matDatepicker]="picker2"
+    [(ngModel)]="fechaFin"
+  />
+  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+  <mat-datepicker #picker2></mat-datepicker>
+</mat-form-field>
+
+
+  </div>
+
+
+    <!--#region  Criterios de Busqueda - Filtro -->
+    <mat-expansion-panel class="panel-expandible" [expanded]="true">
+      <mat-expansion-panel-header>
+        <h4 class="sub_title">Criterios de Búsqueda</h4>
+      </mat-expansion-panel-header>
+      <form
+        class="example-form"
+        [formGroup]="form"
+        #frmcarga="ngForm"
+        (ngSubmit)="buscar()"
+      >
+        <div
+          fxLayout
+          fxLayout.xs="column"
+          fxLayoutAlign.xs="space-around center"
+          fxLayoutGap.xs="1px"
+          fxLayoutGap="2px"
+          fxLayoutAlign="space-between center"
+          fxFlexFill
+          fxLayout.sm="column"
+          fxLayoutAlign.sm="space-around stretch"
+          fxLayoutGap.sm="1px"
+        >
+          <mat-form-field appearance="outline" style="width: 40%">
+            <mat-label> Descripción</mat-label>
+            <input
+              matInput
+              placeholder="Descripción"
+              type="text"
+              formControlName="filtroDescripcion"
+            />
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline" style="width: 30%">
+            <mat-label> Cod. KKS</mat-label>
+            <input
+              matInput
+              placeholder="Codigo"
+              type="text"
+              formControlName="filtroCodigoKKS"
+            />
+          </mat-form-field>
+
+          <div fxFlex>
+            <div fxLayout="row">
+              <mat-form-field appearance="outline" fxFlex="90">
+                <mat-label>Ubicación Técnica</mat-label>
+                <input
+                  matInput
+                  placeholder="Ubicacion Tecnica"
+                  type="text"
+                  formControlName="filtroUbicacionTecnica"
+                  readonly
+                />
+              </mat-form-field>
+              <button type="button" (click)="desplegarFiltroUbicacionTecnica()" fxFlex>
+                <mat-icon>search</mat-icon>
+              </button>
+            </div>
+          </div>
+
+
+         
+        </div>
+  
+        <div
+          fxLayout
+          fxLayout.xs="column"
+          fxLayoutAlign.xs="space-around center"
+          fxLayoutGap.xs="1px"
+          fxLayoutGap="2px"
+          fxLayoutAlign="center end"
+          fxFlexFill
+          fxLayout.sm="column"
+          fxLayoutAlign.sm="space-around stretch"
+          fxLayoutGap.sm="1px"
+        >
+          <button
+            mat-flat-button
+            type="button"
+            color="primary"
+            (click)="buscar()"
+          >
+            <mat-icon>search</mat-icon> <span>Buscar</span>
+          </button>
+          <button
+            mat-flat-button
+            type="button"
+            color="accent"
+            (click)="limpiar()"
+          >
+            <span>Limpiar</span>
+          </button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+    <!--#endregion -->
+
+
+    <!--#region listado activos -->
+<div
+class="botonera"
+fxLayout.xs="column"
+fxLayout.sm="column"
+fxLayout="row"
+fxLayoutAlign.xs="start start"
+fxLayoutAlign.sm="start start"
+fxLayoutAlign="space-between center"
+fxLayoutGap.xs="1px"
+fxLayoutGap.sm="1px"
+fxLayoutGap="4px"
+fxFill
+>
+<div fxLayout="row">
+  <h4 class="sub_title">Listado de Activos</h4>
+</div>
+
+</div>
+<!--#endregion -->
+
+
+<!--#region Contenedor la tabla -->
+<div class="example-container mat-elevation-z8">
+  <!-- Cargando -->
+  <div *ngIf="isLoadingResults" class="loading-shades">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- contenedor de la tabla -->
+  <div class="example-table-container">
+    <table
+
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      class="mat-elevation-z8 tableresponse"
+
+    >
+    <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                  <mat-checkbox (change)="$event ? masterToggle() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                [aria-label]="checkboxLabel()">
+                  </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                  <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null"
+                                [checked]="selection.isSelected(row)"
+                                [aria-label]="checkboxLabel(row)">
+                  </mat-checkbox>
+                </td>
+              </ng-container>
+
+      <ng-container matColumnDef="Id" width="5%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>Id</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.intId }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Codigo KKS" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Codigo KKS
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.strCodigoKKS }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Descripcion" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Descripcion
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.strNombre }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Tipo" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>Tipo</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.objConstanteTipoActivo.strValor }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="N° Serie" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          N° Serie
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.strNumeroSerie }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Marca" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>Marca</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.objDatoMarca.strNombre }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Modelo" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Modelo
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.strModelo }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Estado" width="10%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Estado
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <ng-template
+            [ngIf]="element.intEstado === 1"
+            [ngIfElse]="userInactivo"
+          >
+            <span> Activo </span>
+          </ng-template>
+
+          <ng-template #userInactivo>
+            <span style="color: tomato">Inactivo</span>
+          </ng-template>
+        </td>
+      </ng-container>
+
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+  <!-- Seccion cuando no hay data -->
+  <div *ngIf="!dataSource.data.length" style="border: solid 0px; padding: 10px">
+    <div style="text-align: center">
+      <div class="text-info">
+        <div style="color: #bdbdc4; font-size: 20px">
+          No se encontraron registros.
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Paginador -->
+  <mat-paginator
+    [pageSize]="numeroFilas"
+    [pageSizeOptions]="pageSizeOptions"
+    [showFirstLastButtons]="true"
+    [length]="cantidadRegistros"
+    (page)="handlePage($event)"
+    class="mat-elevation-z8"
+  >
+  </mat-paginator>
+</div>
+<!--#endregion -->

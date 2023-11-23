@@ -1,0 +1,67 @@
+::ng-deep .mat-toolbar{
+    position: sticky;
+    position: -webkit-sticky; /* For macOS/iOS Safari */
+    top: 0; /* Sets the sticky toolbar to be on top */
+    z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
+  }
+.example-container{
+    padding-top: 10px;
+}
+
+mat-card {
+    max-width: 400px;
+    margin: 2em auto;
+    text-align: center;
+   }
+
+   ::ng-deep  .img_fondo{
+    width: 85%;
+    height: auto;
+    max-width: 100%;
+    left: 10px;
+    filter: brightness(100%);
+     animation: escalar 1.5s infinite alternate; 
+     float: right;
+
+}
+
+input.example-right-align::-webkit-outer-spin-button,
+input.example-right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.example-right-align {
+  -moz-appearance: textfield;
+}
+
+
+::ng-deep .loading-shades {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background:transparent;
+  z-index: 1;
+  display: block;
+  align-items: end;
+  justify-content: end;
+}
+.spinner-container {
+  position: absolute;
+  padding-top: 60px;
+  width: 100%;
+  background-color: #004F91;
+  z-index: 70;
+  height: 100%;
+}
+
+
+
+@media screen and (max-width: 950px) {
+    ::ng-deep  .img_fondo{
+        width: 100%;
+        height: auto;
+    }
+    
+}

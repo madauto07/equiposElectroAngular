@@ -1,0 +1,382 @@
+
+<!--#region Titulo -->
+<h2 class="title">Editar Programación Mensual de Indisponibilidad</h2>
+<!--#endregion -->
+
+<div fxLayout fxLayout.xs="row" 
+fxLayoutAlign.xs="space-around stretch" 
+fxLayoutGap.xs="1px" 
+  fxLayoutGap="2px"
+   fxLayoutAlign="space-between center" 
+  fxFlexFill fxLayout.sm="row"
+   fxLayoutAlign.sm="space-around stretch"
+  fxLayoutGap.sm="10px">
+    <div class="example-table-container" style="border:solid 1px; border-color:#00559f;">
+
+        <table class="mat-elevation-z8 tableresponse" style="border-color:#b3cce2 ;">
+            <thead style="background: #00448d; color:#fff; padding: 5px; margin-top: 5px;">
+                <th>Id</th>
+                <th>Titulo</th>
+                <th>Año</th>
+                <th>Semana</th>
+            </thead>
+            <tbody style="font-size: 16px;">
+                <tr>
+                    <td>{{idProgramacion}}</td>
+                    <td>{{titulo}}</td>
+                    <td> {{labelanho}} </td>
+                    <td>  {{labelSem}} </td>
+                </tr>
+            </tbody>
+        </table>
+    
+    </div>
+
+ </div>
+
+<!--#region  Criterios de Busqueda - Filtro -->
+<mat-card>
+    <mat-card-title class="sub_title"></mat-card-title>
+    <mat-card-content>
+       <form [formGroup]="form1" fxLayout="column" fxLayoutGap="20px"> 
+        
+      <mat-expansion-panel class="panel-expandible" [expanded]="false">
+        <mat-expansion-panel-header>
+          <h4 class="sub_title"> Criterios de Búsqueda</h4>
+        </mat-expansion-panel-header>
+
+
+        <div
+        fxLayout.xs="column"
+        fxLayout.sm="column"
+        fxLayout="row"
+        fxLayoutGap.xs="1px"
+        fxLayoutGap.sm="2px"
+        fxLayoutGap="30px"
+        fxFill
+        fxLayoutAlign.xs="start stretch"
+        fxLayoutAlign.sm="start stretch"
+        fxLayoutAlign="space-around"
+      >
+        <div
+          fxLayout.xs="column"
+          fxLayout.sm="column"
+          fxLayout="row"
+          fxLayoutGap.xs="1px"
+          fxLayoutGap.sm="2px"
+          fxLayoutGap="30px"
+          fxLayoutAlign.xs="start stretch"
+          fxLayoutAlign.sm="start stretch"
+          fxLayoutAlign="start start"
+          fxFlex="80"
+        >
+          <mat-form-field appearance="outline" fxFlex="50">
+            <mat-label>Id Actividad</mat-label>
+            <input
+              matInput
+              placeholder="Cod. Actividad"
+              type="number"
+              formControlName="filtroCodActividad"
+              #inputFocoInicial
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex>
+            <mat-label>Equipo</mat-label>
+            <input
+              matInput
+              placeholder="Equipo"
+              type="number"
+              formControlName="filtroNombreEquipo"
+            />
+          </mat-form-field>
+        </div>
+        <div
+          fxLayout.xs="column"
+          fxLayout.sm="column"
+          fxLayout="row"
+          fxLayoutGap="5px"
+          fxLayoutAlign.xs="center stretch"
+          fxLayoutAlign.sm="center stretch"
+          fxLayoutAlign="end start"
+          fxFlex="20"
+        >
+          <button
+            mat-flat-button
+            type="button"
+            color="primary"
+            (click)="listar()"
+          >
+            <span>Buscar</span>
+          </button>
+          <button
+            mat-flat-button
+            type="button"
+            color="accent"
+            (click)="limpiar()"
+          >
+            <span>Limpiar</span>
+          </button>
+        </div>
+      </div>
+
+      <div
+      fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayout="row"
+      fxLayoutGap.xs="1px"
+      fxLayoutGap.sm="1px"
+      fxLayoutGap="30px"
+      fxFill
+    >
+    <mat-form-field appearance="outline" fxFlex="90">
+      <mat-label>Actividad</mat-label>
+      <input
+        matInput
+        placeholder="Titulo"
+        type="text"
+        formControlName="filtroControlActividad"
+      />
+    </mat-form-field>
+  
+      <mat-form-field
+      appearance="outline"
+      fxFlex.xs="100"
+      fxFlex.sm="100"
+      fxFlex="50"
+      >
+      <mat-label>Tipo Mantenimiento(*)</mat-label>
+      <mat-select
+        formControlName="filtroSelectTipoMant"
+        [(ngModel)]="selectedTipoMant"
+        (selectionChange)="onTipoMantenimientoChange($event.value)"
+        
+      >
+        <mat-option *ngFor="let modulo of listaTipoMant" [value]="modulo.intId">
+          {{ modulo.strNombre }}
+        </mat-option>
+      </mat-select>
+      </mat-form-field>
+  
+      </div>
+      
+      <div
+      fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayout="row"
+      fxLayoutGap.xs="1px"
+      fxLayoutGap.sm="1px"
+      fxLayoutGap="30px"
+      fxFill
+    >
+      <mat-form-field appearance="outline" fxFlex="20">
+        <mat-label>Tipo</mat-label>
+        <input
+          type="text"
+          placeholder="Seleccione tipo de activo"
+          aria-label="Tipo Activo"
+          matInput
+          formControlName="filtroTipoEquipoSelectAC"
+          [matAutocomplete]="tipoActivoAutocomplete"
+        />
+        <mat-autocomplete
+          #tipoActivoAutocomplete="matAutocomplete"
+          [displayWith]="mostrarNombreTipoActivoSelect"
+        >
+          <mat-option
+            *ngFor="let tipoActivo of listaTipoActivoFiltrada | async"
+            [value]="tipoActivo"
+          >
+            {{ tipoActivo.strValor }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <div fxFlex>
+        <div fxLayout="row">
+          <mat-form-field appearance="outline" fxFlex="90">
+            <mat-label>Ubicación Técnica</mat-label>
+            <input
+              matInput
+              placeholder="Ubicacion Tecnica"
+              type="text"
+              formControlName="filtroUbicacionTecnica"
+              readonly
+            />
+          </mat-form-field>
+          <button type="button" (click)="desplegarFiltroUbicacionTecnica()" fxFlex>
+            <mat-icon>search</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div fxFlex>
+        <div fxLayout="row">
+          <mat-form-field appearance="outline" fxFlex="90">
+            <mat-label>Código del Equipo</mat-label>
+            <input
+              matInput
+              placeholder="Codigo del Equipo"
+              type="text"
+              formControlName="filtroCodigoEquipo"
+              readonly
+            />
+          </mat-form-field>
+          <button type="button" (click)="desplegarFiltroCodigoEquipo()" fxFlex>
+            <mat-icon>search</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  
+
+   
+      </mat-expansion-panel>
+
+       </form> 
+
+    </mat-card-content>
+</mat-card>
+
+
+<div class="contenedor_listado" fxLayout="column" fxLayoutGap="0.5rem">
+
+    <!--#region Tabla -->
+    <div class="example-container mat-elevation-z8">
+      <div *ngIf="isLoadingResults" class="loading-shades">
+        <mat-spinner></mat-spinner>
+      </div>
+  
+      <div class="example-table-container">
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          class="mat-elevation-z8 tableresponse"
+        >
+          <ng-container matColumnDef="id" width="10%">
+            <th mat-header-cell *matHeaderCellDef>Id</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.intId }}
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="idactividad" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Id Actividad</th>
+            <td mat-cell *matCellDef="let element">{{ element.intIdActividad }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="Actividad" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Actividad</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombreActividad }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="TipoMant" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Tipo Mant.</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombreTipoMant }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="parte" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Parte</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombreParte }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="subparte" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Sub Parte</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombreSubParte }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="ubitecnica" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Ubic. Tecnica</th>
+            <td mat-cell *matCellDef="let element">{{ element.strCodUbicacionTecnica }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="codequipo" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Cod. Equipo</th>
+            <td mat-cell *matCellDef="let element">{{ element.strCodEquipo }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="Equipo" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Equipo</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombreEquipo }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="condsistema" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Cond. Sistema</th>
+            <td mat-cell *matCellDef="let element">{{ element.intCondicionSistema }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="condequipo" width="70%">
+            <th mat-header-cell *matHeaderCellDef>Cond. Equipo</th>
+            <td mat-cell *matCellDef="let element">{{ element.intCondicionEquipo }}</td>
+          </ng-container>
+
+
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <div
+        *ngIf="!dataSource.data.length"
+        style="border: solid 0px; padding: 10px"
+      >
+        <div style="text-align: center">
+          <div class="text-info">
+            <div style="color: #bdbdc4; font-size: 20px">
+              No se encontraron registros.
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <mat-paginator
+        [pageSize]="numeroFilas"
+        [pageSizeOptions]="[5, 10, 15, 20, 50]"
+        [showFirstLastButtons]="true"
+        [length]="cantidadRegistros"
+        (page)="handlePage($event)"
+        class="mat-elevation-z8"
+      >
+      </mat-paginator>
+    </div>
+    <!--#endregion -->
+
+
+    
+<div
+fxLayout fxLayout.xs="row" 
+fxLayoutAlign.xs="space-around stretch" 
+fxLayoutGap.xs="1px" 
+fxLayoutGap="2px"
+fxLayoutAlign="left" 
+fxFlexFill fxLayout.sm="row"
+fxLayoutAlign.sm="space-around stretch"
+fxLayoutGap.sm="10px"
+
+>
+<button
+mat-flat-button
+type="button"
+color="primary"
+(click)="agregar()"
+[disabled]="soloLectura"
+>
+Agregar
+</button>
+
+
+<button
+mat-flat-button
+type="button"
+color="accent"
+(click)="regresar()"
+[disabled]="soloLectura"
+>
+Regresar
+</button>
+
+
+</div>
+   
+</div>
+

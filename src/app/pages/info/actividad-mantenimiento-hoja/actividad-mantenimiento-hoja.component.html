@@ -1,0 +1,266 @@
+<h2 class="title_registro">Hoja de Seguridad de actividades</h2>
+
+<div fxLayout="row" fxLayoutGap="10">
+  <!-- Busqueda de elementos de Seguridad -->
+  <div fxFlex="45">
+    <p class="sub_title">Busqueda de Elementos de Seguridad</p>
+    <div class="contenido_borde">
+          <!--#region Panel Registro -->
+    <mat-expansion-panel class="panel-expandible" [expanded]="true">
+      <mat-expansion-panel-header>
+        <p *ngIf="!isEdit" class="sub_title">Registrar Elemento de Seguridad</p>
+        <p *ngIf="isEdit" class="sub_title">Actualizar Elemento de Seguridad</p>
+      </mat-expansion-panel-header>
+      <form
+        [formGroup]="form"
+        (ngSubmit)="guardarElemento()"
+        [style.fontSize.px]="getFontSize()"
+      >
+        <div
+          fxLayout.xs="column"
+          fxLayout.sm="column"
+          fxLayout="row"
+          fxLayoutGap.xs="1px"
+          fxLayoutGap.sm="2px"
+          fxLayoutGap="20px"
+          fxFlex.xs="100"
+          fxFlex.sm="100"
+          fxFlex="80"
+          fxLayoutAlign.xs="start stretch"
+          fxLayoutAlign.sm="start stretch"
+          fxLayoutAlign="space-around"
+        >
+          <div
+            fxLayout.xs="column"
+            fxLayout.sm="column"
+            fxLayout="column"
+            fxLayoutGap.xs="1px"
+            fxLayoutGap.sm="2px"
+            fxLayoutGap="5px"
+            fxLayoutAlign.xs="start stretch"
+            fxLayoutAlign.sm="start stretch"
+            fxLayoutAlign="start stretch"
+            fxFlex="80"
+          >
+            <mat-form-field appearance="outline">
+              <mat-label>Descripcion(*)</mat-label>
+              <input
+                matInput
+                placeholder="Descripcion"
+                type="text"
+                formControlName="descripcion"
+                id = "idDescripcionElementoBusqueda"
+              />
+            </mat-form-field>
+
+            <div>
+              <mat-form-field appearance="outline">
+                <mat-label>Archivo</mat-label>
+                <input
+                  matInput
+                  placeholder="Archivo"
+                  type="text"
+                  formControlName="archivo"
+                  readonly
+                />
+              </mat-form-field>
+              <button
+                mat-flat-button
+                type="button"
+                color="primary"
+                (click)="fileInput.click()"
+              >
+                <span>examinar</span>
+              </button>
+              <input
+                hidden
+                (change)="examinar($event)"
+                #fileInput
+                type="file"
+                id="file"
+              />
+            </div>
+          </div>
+
+          <div
+            fxLayout.xs="column"
+            fxLayout.sm="column"
+            fxLayout="column"
+            fxLayoutGap="5px"
+            fxLayoutAlign.xs="center stretch"
+            fxLayoutAlign.sm="center stretch"
+            fxLayoutAlign="start stretch"
+            fxFlex="20"
+          >
+            <button mat-flat-button type="submit" color="primary" [disabled]="soloLectura">
+              <span>Grabar</span>
+            </button>
+            <button mat-flat-button type="button" (click) = "cancelar()" color="accent" >
+              <span>Cancelar</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-expansion-panel>
+    <!--#endregion Panel Registro -->
+    <div class="table-container">
+      <div class="example-table-container">
+        <table
+          mat-table
+          [dataSource]="dataSourceElementoBusqueda"
+          class="mat-elevation-z8 tableresponse"
+        >
+          <ng-container matColumnDef="Id" width="10%">
+            <th mat-header-cell *matHeaderCellDef>Id</th>
+            <td mat-cell *matCellDef="let element">{{ element.intId }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="Descripcion" width="80%">
+            <th mat-header-cell *matHeaderCellDef>Descripcion</th>
+            <td mat-cell *matCellDef="let element">{{ element.strNombre }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="Acciones" width="10%">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center">
+              Acciones
+            </th>
+
+            <td mat-cell *matCellDef="let element" style="text-align: center">
+              <button (click)="editarElemento(element)" style="margin: 5px">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button (click)="eliminarElemento(element)" [disabled]="soloLectura">
+                <mat-icon>delete</mat-icon>
+              </button>
+              <button
+                *ngIf="element.intIdDocumento > 0"
+                (click)="descargarArchivoElemento(element)"
+                style="margin: 5px"
+              >
+                <mat-icon>cloud_download</mat-icon>
+              </button>
+
+            </td>
+          </ng-container>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumnsElementoBusqueda"
+          ></tr>
+          <tr
+            mat-row
+            (click)="rowClick(row)"
+            [class.selected]="idElementoSeleccionado == row.intId"
+            *matRowDef="let row; columns: displayedColumnsElementoBusqueda"
+          ></tr>
+        </table>
+      </div>
+      <div
+        *ngIf="!dataSourceElementoBusqueda.data.length"
+        style="border: solid 0px; padding: 10px"
+      >
+        <div style="text-align: center">
+          <div class="text-info">
+            <div style="color: #bdbdc4; font-size: 20px">
+              No se encontraron registros.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- Botones de Asignacion o eliminacion -->
+  <div fxFlex="10" fxLayoutAlign="space-around center">
+    <div
+      fxLayout="column"
+      fxLayoutGap="5px"
+      fxLayoutAlign="space-between center"
+    >
+      <button
+        mat-icon-button
+        color="primary"
+        tooltip="Eliminar Elemento"
+        (click)="eliminarAginacion()"
+        style="cursor: pointer"
+        [disabled]="soloLectura"
+      >
+        <mat-icon>arrow_circle_left</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        color="primary"
+        tooltip="Asignar Elemento"
+        (click)="agregarAsignacion()"
+        style="cursor: pointer"
+        [disabled]="soloLectura"
+      >
+        <mat-icon>arrow_circle_right</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Elementos Asignados -->
+  <div fxFlex="45">
+    <p class="sub_title">Elementos Asignados</p>
+    <div class="table-container contenido_borde" >
+      <div class="example-table-container">
+        <table
+          mat-table
+          [dataSource]="dataSourceElementoAsignado"
+          class="mat-elevation-z8 tableresponse"
+        >
+          <ng-container matColumnDef="Id" width="10%">
+            <th mat-header-cell *matHeaderCellDef>Id</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.intId }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Descripcion" width="80%">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.strNombre }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="Acciones" width="10%">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center">
+              Acciones
+            </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center">
+              <button
+                (click)="descargarArchivoElemento(element)"
+                class="btn btn-secondary"
+                style="margin: 5px"
+              >
+                <mat-icon>cloud_download</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumnsElementoAsignado"
+          ></tr>
+          <tr
+            mat-row
+            (click)="rowClickElementosAsignados(row)"
+            [class.selected]="elementoAsignadoSel.intId == row.intId"
+            *matRowDef="let row; columns: displayedColumnsElementoAsignado"
+          ></tr>
+        </table>
+      </div>
+      <div
+        *ngIf="!dataSourceElementoAsignado.data.length"
+        style="border: solid 0px; padding: 10px"
+      >
+        <div style="text-align: center">
+          <div class="text-info">
+            <div style="color: #bdbdc4; font-size: 20px">
+              No se encontraron registros.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+:host .mat-card ::ng-deep .mat-form-field-wrapper{
+    margin: 5 !important;
+    padding: 5 !important;
+  }
+  
+  :host ::ng-deep .mat-expansion-indicator::after {
+    color: inherit !important;
+  }
+  
+  .title{
+    text-align: start;
+    font-weight: bold;
+  }
+  
+  .sub_title{
+    font-size: 15px !important;
+    font-weight: bold;
+  }
+  
+  .mat-card{
+    border: solid 0.5px gray;
+    background-color:inherit;
+    margin-bottom: 10px;
+  }
+  
+  .mat-expansion-panel{
+    border: solid 0.5px gray;
+  }
+  
+  .botonera{
+    margin-bottom: 5px;
+  }
+  

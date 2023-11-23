@@ -1,0 +1,88 @@
+<form [formGroup]="form" (ngSubmit)="guardarSubconstante($event)">
+  <mat-card>
+    <mat-card-title>
+      <h4 class="sub_title" *ngIf="idSubConstante === 0" style="margin: 0; font-size: 15px">
+        Registrar Subconstante
+      </h4>
+      <h4 class="sub_title" *ngIf="idSubConstante > 0" style="margin: 0; font-size: 15px">
+        Editar Subconstante
+      </h4>
+    </mat-card-title>
+    <mat-card-content
+      style="width: 100%"
+      fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayout="row"
+      fxLayoutAlign="start start"
+      fxLayoutGap="10px"
+    >
+      <div fxFlex="70" style="width: 100%">
+        <div
+          fxLayout.xs="column"
+          fxLayout.sm="column"
+          fxLayout="row"
+          fxLayoutGap.md="10px"
+          fxLayoutGap.lg="20px"
+          style="width: 100%"
+        >
+          <mat-form-field appearance="outline" fxFlex="50">
+            <mat-label>Nombre</mat-label>
+            <input
+              id="controlNombre"
+              placeholder="Nombre"
+              formControlName="nombre"
+              matInput
+              type="text"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex="50">
+            <mat-label>Valor</mat-label>
+            <input
+              placeholder="Valor"
+              formControlName="valor"
+              matInput
+              type="text"
+            />
+          </mat-form-field>
+        </div>
+        <div fxLayout="row">
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-label>Descripcion</mat-label>
+            <textarea
+              placeholder="Descripcion"
+              formControlName="descripcion"
+              matInput
+            ></textarea>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row">
+          <div fxLayout="column">
+            <mat-slide-toggle formControlName="estado" color="primary">
+              Estado
+            </mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+      <div
+        fxLayout.xs="row"
+        fxLayout.sm="row"
+        fxLayout="column"
+        fxLayoutGap="10px"
+      >
+        <button mat-flat-button type="submit" color="primary">
+          <span> Guardar </span>
+        </button>
+        <button
+          (click)="ocultarComponente()"
+          mat-flat-button
+          type="button"
+          color="accent"
+        >
+          Cancelar
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</form>
+<!-- {{ idSubConstante }}
+{{ idConstante }} -->

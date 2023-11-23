@@ -1,0 +1,485 @@
+
+<h2 class="title_registro">Equipos de actividades</h2>
+<mat-stepper labelPosition="bottom" #stepper>
+    <mat-step [stepControl]="firstFormGroup">
+      <form [formGroup]="firstFormGroup">
+
+        <ng-template matStepLabel>Seleccionar Activo</ng-template>
+
+<!--#region  PRIMER STEPPER : SELECCIONAR ACTIVO-->
+        <mat-expansion-panel class="panel-expandible" [expanded]="false">
+          <mat-expansion-panel-header>
+            <h4 class="sub_title">Criterios de Búsqueda</h4>
+          </mat-expansion-panel-header>
+
+          <div
+        fxLayout.xs="column"
+        fxLayout.sm="column"
+        fxLayout="row"
+        fxLayoutGap.xs="1px"
+        fxLayoutGap.sm="2px"
+        fxLayoutGap="30px"
+        fxFill
+        fxLayoutAlign.xs="start stretch"
+        fxLayoutAlign.sm="start stretch"
+        fxLayoutAlign="space-around"
+      >
+        <div
+          fxLayout.xs="column"
+          fxLayout.sm="column"
+          fxLayout="row"
+          fxLayoutGap.xs="1px"
+          fxLayoutGap.sm="2px"
+          fxLayoutGap="30px"
+          fxLayoutAlign.xs="start stretch"
+          fxLayoutAlign.sm="start stretch"
+          fxLayoutAlign="start start"
+          fxFlex="80"
+        >
+          <mat-form-field appearance="outline" fxFlex="50">
+            <mat-label>Descripcion</mat-label>
+            <input
+              matInput
+              placeholder="Descripcion"
+              type="text"
+              formControlName="filtroDescripcion"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex>
+            <mat-label>Cód. KKS</mat-label>
+            <input
+              matInput
+              placeholder="CodigoKKS"
+              type="text"
+              formControlName="filtroCodigoKKS"
+            />
+          </mat-form-field>
+        </div>
+        <div
+          fxLayout.xs="column"
+          fxLayout.sm="column"
+          fxLayout="row"
+          fxLayoutGap="5px"
+          fxLayoutAlign.xs="center stretch"
+          fxLayoutAlign.sm="center stretch"
+          fxLayoutAlign="end start"
+          fxFlex="20"
+        >
+          <button
+            mat-flat-button
+            type="button"
+            color="primary"
+            (click)="listar()"
+          >
+            <span>Buscar</span>
+          </button>
+          <button
+            mat-flat-button
+            type="button"
+            color="accent"
+            (click)="limpiar()"
+          >
+            <span>Limpiar</span>
+          </button>
+        </div>
+      </div>
+
+
+          <div
+            fxLayout.xs="column"
+            fxLayout.sm="column"
+            fxLayout="row"
+            fxLayoutGap.xs="1px"
+            fxLayoutGap.sm="1px"
+            fxLayoutGap="30px"
+            fxFill
+          >
+            <mat-form-field appearance="outline" fxFlex="20">
+              <mat-label>Tipo</mat-label>
+              <input
+                type="text"
+                placeholder="Seleccione tipo de activo"
+                aria-label="Tipo Activo"
+                matInput
+                formControlName="filtroTipoEquipoSelectAC"
+                [matAutocomplete]="tipoActivoAutocomplete"
+              />
+              <mat-autocomplete
+                #tipoActivoAutocomplete="matAutocomplete"
+                [displayWith]="mostrarNombreTipoActivoSelect"
+              >
+                <mat-option
+                  *ngFor="let tipoActivo of listaTipoActivoFiltrada | async"
+                  [value]="tipoActivo"
+                >
+                  {{ tipoActivo.strValor }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+
+            <div fxFlex>
+              <div fxLayout="row">
+                <mat-form-field appearance="outline" fxFlex="90">
+                  <mat-label>Ubicación Técnica</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ubicacion Tecnica"
+                    type="text"
+                    formControlName="filtroUbicacionTecnica"
+                    readonly
+                  />
+                </mat-form-field>
+                <button type="button" (click)="desplegarFiltroUbicacionTecnica()" fxFlex>
+                  <mat-icon>search</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <div fxFlex>
+              <div fxLayout="row">
+                <mat-form-field appearance="outline" fxFlex="90">
+                  <mat-label>Código del Equipo</mat-label>
+                  <input
+                    matInput
+                    placeholder="Codigo del Equipo"
+                    type="text"
+                    formControlName="filtroCodigoEquipo"
+                    readonly
+                  />
+                </mat-form-field>
+                <button type="button" (click)="desplegarFiltroCodigoEquipo()" fxFlex>
+                  <mat-icon>search</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+
+<!--#endregion -->
+<!--#region Botonera -->
+<div
+  class="botonera"
+  fxLayout.xs="column"
+  fxLayout.sm="column"
+  fxLayout="row"
+  fxLayoutAlign.xs="start start"
+  fxLayoutAlign.sm="start start"
+  fxLayoutAlign="space-between center"
+  fxLayoutGap.xs="1px"
+  fxLayoutGap.sm="1px"
+  fxLayoutGap="4px"
+  fxFill
+>
+  <div fxLayout="row">
+    <h4 class="sub_title">Listado de Activos</h4>
+  </div>
+
+</div>
+<!--#endregion -->
+
+<!--#region Contenedor la tabla -->
+<div class="example-container mat-elevation-z8">
+  <!-- Cargando -->
+  <div *ngIf="isLoadingResults" class="loading-shades">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- contenedor de la tabla -->
+  <div class="example-table-container">
+    <table
+
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      class="mat-elevation-z8 tableresponse"
+
+    >
+    <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                  <mat-checkbox (change)="$event ? masterToggle() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                [aria-label]="checkboxLabel()">
+                  </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                  <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null"
+                                [checked]="selection.isSelected(row)"
+                                [aria-label]="checkboxLabel(row)">
+                  </mat-checkbox>
+                </td>
+              </ng-container>
+
+      <ng-container matColumnDef="Id" width="5%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>Id</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.intId }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Codigo KKS" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Codigo KKS
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.strCodigoKKS }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Descripcion" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Descripcion
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.strNombre }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Tipo" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>Tipo</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.objConstanteTipoActivo.strValor }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="N° Serie" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          N° Serie
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.strNumeroSerie }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Marca" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>Marca</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.objDatoMarca.strNombre }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Modelo" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Modelo
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.strModelo }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Estado" width="10%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Estado
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <ng-template
+            [ngIf]="element.intEstado === 1"
+            [ngIfElse]="userInactivo"
+          >
+            <span> Activo </span>
+          </ng-template>
+
+          <ng-template #userInactivo>
+            <span style="color: tomato">Inactivo</span>
+          </ng-template>
+        </td>
+      </ng-container>
+
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+  <!-- Seccion cuando no hay data -->
+  <div *ngIf="!dataSource.data.length" style="border: solid 0px; padding: 10px">
+    <div style="text-align: center">
+      <div class="text-info">
+        <div style="color: #bdbdc4; font-size: 20px">
+          No se encontraron registros.
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Paginador -->
+  <mat-paginator
+    [pageSize]="numeroFilas"
+    [pageSizeOptions]="pageSizeOptions"
+    [showFirstLastButtons]="true"
+    [length]="cantidadRegistros"
+    (page)="handlePage($event)"
+    class="mat-elevation-z8"
+  >
+  </mat-paginator>
+</div>
+<!--#endregion -->
+
+<div fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="space-between center"
+>
+
+        <div fxLayout="row" style="margin-top: 20px; padding: 20px;">
+          <button mat-button matStepperNext  color="primary"  (click)="Siguiente_Programacion()" style="background: #00448d; color: #fff;" >Siguiente </button>
+        </div>
+</div>
+
+  </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup" optional>
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel> Determinar Programación </ng-template>
+        <div>
+          <app-actividad-mantenimiento-programacion
+          [idActividad]="idActividad"
+          (listarEquiposAsignados)="listarEquiposAsignados($event)" 
+          [equiposSeleccionados]="equiposSeleccionados"
+        ></app-actividad-mantenimiento-programacion>
+
+        </div>
+
+        <div fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="space-between center">
+        <div fxLayout="row" style="margin-top: 20px; padding: 20px;">
+          <button mat-button matStepperPrevious style="background: #27a4dd; color: #fff;" > Regresar </button> 
+          <button mat-button (click)="stepper.reset()" style="background: #00448d; color: #fff;">Finalizar</button>
+        </div>
+        </div>
+     </form>
+    </mat-step>
+
+  </mat-stepper>
+
+
+
+  <mat-expansion-panel class="panel-expandible" [expanded]="true">
+    <mat-expansion-panel-header>
+      <h4 class="sub_title">Activos Asignados</h4>
+    </mat-expansion-panel-header>
+    <div
+    fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayout="row"
+      fxLayoutGap.xs="1px"
+      fxLayoutGap.sm="1px"
+      fxLayoutGap="30px"
+      fxFill
+  >
+
+    <mat-form-field appearance="outline" fxFlex>
+      <mat-label>Versión</mat-label>
+      <input
+        type="text"
+        placeholder="Buscar"
+        matInput
+        formControlName="filtroTextoAsignado"
+      />
+    </mat-form-field>
+    </div>
+
+    <div
+  class="botonera"
+  fxLayout.xs="column"
+  fxLayout.sm="column"
+  fxLayout="row"
+  fxLayoutAlign.xs="start start"
+  fxLayoutAlign.sm="start start"
+  fxLayoutAlign="space-between center"
+  fxLayoutGap.xs="1px"
+  fxLayoutGap.sm="1px"
+  fxLayoutGap="4px"
+  fxFill
+>
+
+    <!--#region Contenedor la tabla ACTIVOS ASIGNADOS -->
+<div class="example-container mat-elevation-z8">
+  <!-- Cargando -->
+  <!-- <div *ngIf="isLoadingResults" class="loading-shades">
+    <mat-spinner></mat-spinner>
+  </div> -->
+
+  <!-- contenedor de la tabla ACTIVOS ASIGNADOS -->
+  <div class="example-table-container">
+    <table
+
+      mat-table
+      [dataSource]="dataSourceAsignado"
+      matSort
+      class="mat-elevation-z8 tableresponse"
+
+    >
+
+
+      <ng-container matColumnDef="tipoActivo" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Tipo Activo
+        </th>
+        <td mat-cell *matCellDef="let element">
+           {{ element.objConstante.strValor }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="CodigoKKS" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Codigo KKS
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.objEquipo.strCodigoKKS }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Nombre" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>Nombre</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.objEquipo.strNombre }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="CondicionSistema" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Condición Sistema
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.intIndSistema }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="CondicionEquipo" width="40%">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>Condición Equipo</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.intIndEquipo }}
+        </td>
+      </ng-container>
+
+
+
+      <ng-container matColumnDef="acciones" width="5%" >
+        <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Acción </th>
+
+        <td mat-cell *matCellDef="let element" style="text-align: center;">
+            <button (click)="editarAsignado(element)"  style="margin: 5px;"> <mat-icon>edit</mat-icon> </button>
+            <button (click)="eliminarAsignado(element)" [disabled]="soloLectura"><mat-icon>delete</mat-icon></button> </td>
+    </ng-container>
+
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsAsignados"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsAsignados"></tr>
+    </table>
+  </div>
+  <!-- Seccion cuando no hay data -->
+  <div *ngIf="!dataSourceAsignado.data.length" style="border: solid 0px; padding: 10px">
+    <div style="text-align: center">
+      <div class="text-info">
+        <div style="color: #bdbdc4; font-size: 20px">
+          No se encontraron registros.
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Paginador -->
+  <mat-paginator
+    [pageSize]="numeroFilasAsignados"
+    [pageSizeOptions]="pageSizeOptionsAsignados"
+    [showFirstLastButtons]="true"
+    [length]="cantidadRegistrosAsignados"
+    (page)="handlePageAsignados($event)"
+    class="mat-elevation-z8"
+  >
+  </mat-paginator>
+</div>
+<!--#endregion -->
+
+    </div>
+
+  </mat-expansion-panel>
+
+

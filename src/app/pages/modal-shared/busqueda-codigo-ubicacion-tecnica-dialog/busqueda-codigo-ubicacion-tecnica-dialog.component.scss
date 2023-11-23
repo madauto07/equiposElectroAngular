@@ -1,0 +1,14 @@
+.title{
+  text-align: start;
+  font-weight: bold;
+}
+
+.sub_title{
+  font-size: 15px !important;
+  font-weight: bold;
+}
+
+:host ::ng-deep .mat-form-field-wrapper{
+  margin: 0 !important;
+  padding: 0 !important;
+}

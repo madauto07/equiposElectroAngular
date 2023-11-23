@@ -1,0 +1,57 @@
+:host .mat-expansion-panel ::ng-deep .mat-form-field-wrapper{
+    margin: 0 !important;
+  }
+  
+  :host ::ng-deep .mat-expansion-indicator::after {
+    color: inherit !important;
+  }
+  
+  .title{
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .sub_title{
+    font-weight: bold;
+  }
+  
+  .panel-expandible{
+    background-color:inherit;
+    margin-bottom: 10px;
+  }
+  
+  .botonera{
+    margin-bottom: 5px;
+  }
+  
+  .table-container{
+     border: 0px solid;
+  }.example-table-container{
+    border: 1px solid; 
+    border-color: lightslategrey;
+
+  }
+
+  .tableresponse{ width: 100%;}
+
+  .mat-row .mat-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+     border-color: rgb(231, 227, 227);
+
+    cursor: pointer;
+  }
+  
+  .mat-row:hover .mat-cell {
+    border-color: currentColor;
+    background-color: lightsteelblue;
+  }
+  
+  .demo-row-is-clicked {
+    font-weight: bold;
+  }
+
+  .mat-form-field {
+    font-size: 14px;
+    width: 80%;
+  }

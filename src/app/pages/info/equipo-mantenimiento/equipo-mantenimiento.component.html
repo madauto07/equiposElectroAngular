@@ -1,0 +1,23 @@
+<h3><b>Registro de Activos</b></h3>
+<mat-tab-group animationDuration="0ms" color="accent" backgroundColor="primary">
+  <mat-tab label="Datos Generales">
+    <mat-card>
+      <app-equipo-mantenimiento-datos></app-equipo-mantenimiento-datos>
+    </mat-card>
+  </mat-tab>
+  <mat-tab *ngIf="isEdit" label="Ficha Técnica">
+    <mat-card>
+      <app-equipo-mantenimiento-ficha></app-equipo-mantenimiento-ficha>
+    </mat-card>
+  </mat-tab>
+  <mat-tab *ngIf="isEdit" label="Imagenes">
+    <mat-card>
+      <app-equipo-mantenimiento-imagen></app-equipo-mantenimiento-imagen>
+    </mat-card>
+  </mat-tab>
+  <mat-tab *ngIf="isEdit" label="Documentos">
+    <mat-card>
+      <app-equipo-mantenimiento-documento></app-equipo-mantenimiento-documento>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>

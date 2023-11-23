@@ -1,0 +1,112 @@
+<!-- Titulo -->
+<h2 class="title">Generación de Programación Anual</h2>
+
+<form
+  [formGroup]="form"
+  (ngSubmit)="generar()"
+  [style.fontSize.px]="getFontSize()"
+  fxLayout="column"
+  fxLayoutAlign="space-around stretch"
+>
+
+<!-- Criterios de Busqueda - Filtro -->
+<mat-expansion-panel class="panel-expandible" [expanded]="true">
+  <mat-expansion-panel-header>
+    <h4 class="sub_title">Criterios de Generación</h4>
+  </mat-expansion-panel-header>
+
+  <div
+    fxLayout="row"
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayoutAlign="start start"
+    fxLayoutGap="0.625rem"
+    style="width: 100%"
+  >
+    <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout="row"
+    fxLayoutAlign.xs="start stretch"
+    fxLayoutAlign.sm="start stretch"
+    fxLayoutAlign="start center"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap.sm="1px"
+    fxLayoutGap="20px"
+    >
+      <mat-form-field appearance="outline" fxFlex="80">
+        <mat-label>Titulo</mat-label>
+        <input
+          id="filtroNombre"
+          matInput
+          placeholder="Nombre"
+          type="text"
+          [(ngModel)]="strBuscarNombre"
+          formControlName="titulo"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>Del</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker1"
+          formControlName="fechaInicio"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>aL</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker2"
+          formControlName="fechaFin"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label> Fecha Generación </mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker3"
+          formControlName="fechaGeneracion"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+        <mat-datepicker #picker3></mat-datepicker>
+      </mat-form-field>
+
+
+
+
+    </div>
+
+    <div
+      fxFlex="20"
+      fxFlex.xs="100"
+      fxFlex.sm="100"
+      fxLayout
+      fxLayout.xs="row"
+      fxLayoutAlign.xs="center end"
+      fxLayoutGap.xs="1px"
+      fxLayoutGap="2px"
+      fxLayoutAlign="center end"
+      fxLayout.sm="row"
+      fxLayoutAlign.sm="center end"
+      fxLayoutGap.sm="1px"
+    >
+      <button mat-flat-button type="button" color="primary" (click)="generar()">
+        <mat-icon>search</mat-icon> <span>Generar</span>
+      </button>
+      <button mat-flat-button type="button" color="accent" (click)="limpiar()">
+        <span>Limpiar</span>
+      </button>
+    </div>
+  </div>
+</mat-expansion-panel>
+
+</form>

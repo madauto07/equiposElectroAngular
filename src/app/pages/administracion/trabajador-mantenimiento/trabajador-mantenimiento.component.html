@@ -1,0 +1,229 @@
+<button mat-mini-fab color="primary" aria-label="Volver" (click)="cancelar()">
+  <mat-icon>arrow_back</mat-icon>
+</button>
+<div style="text-align: center"><b>Mantenimiento de Trabajador</b></div>
+<br />
+<!--
+-->
+<form
+  class="example-form"
+  [formGroup]="form"
+  (ngSubmit)="guardar()"
+  [style.fontSize.px]="getFontSize()"
+>
+  <div *ngIf="isLoadingResults" fxLayout="row" fxLayoutAlign="center">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Id -->
+  <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout="row"
+    fxLayoutAlign.xs="start start"
+    fxLayoutAlign.sm="start start"
+    fxLayoutAlign="start center"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap.sm="1px"
+    fxLayoutGap="20px"
+    fxFlexFill
+  >
+    <mat-form-field appearance="outline" style="width: 10%">
+      <mat-label>ID</mat-label>
+      <input
+        type="number"
+        placeholder="Id"
+        matInput
+        maxlength="100"
+        formControlName="intId"
+      />
+    </mat-form-field>
+  </div>
+  <!-- Nombres y Apellidos -->
+  <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout="row"
+    fxLayoutAlign.xs="start start"
+    fxLayoutAlign.sm="start start"
+    fxLayoutAlign="start center"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap.sm="1px"
+    fxLayoutGap="20px"
+    fxFlexFill
+  >
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Nombres(*)</mat-label>
+      <input
+        type="text"
+        placeholder="Digite Nombres"
+        matInput
+        formControlName="strNombre"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Apellidos(*)</mat-label>
+      <input
+        type="text"
+        placeholder="Digite Apellidos"
+        matInput
+        formControlName="strApellido"
+      />
+    </mat-form-field>
+  </div>
+  <!-- Codigo y Especialidad -->
+  <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout="row"
+    fxLayoutAlign.xs="start start"
+    fxLayoutAlign.sm="start start"
+    fxLayoutAlign="start center"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap.sm="1px"
+    fxLayoutGap="20px"
+    fxFlexFill
+  >
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Codigo</mat-label>
+      <input
+        type="text"
+        placeholder="Digite Codigo"
+        matInput
+        formControlName="strCodigo"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Especialidad</mat-label>
+      <input
+        type="text"
+        placeholder="Seleccione especialidad"
+        aria-label="Especialidad"
+        matInput
+        formControlName="especialidad"
+        [matAutocomplete]="especialidadAutocomplete"
+      />
+      <mat-autocomplete
+        #especialidadAutocomplete="matAutocomplete"
+        [displayWith]="mostrarNombreEspecialidadSelect"
+      >
+        <mat-option
+          *ngFor="let especialidad of listaEspecialidadFiltrada | async"
+          [value]="especialidad"
+        >
+          {{ especialidad.strValor }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <!-- Correo y Telefono -->
+  <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout="row"
+    fxLayoutAlign.xs="start start"
+    fxLayoutAlign.sm="start start"
+    fxLayoutAlign="start center"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap.sm="1px"
+    fxLayoutGap="20px"
+    fxFlexFill
+  >
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Correo</mat-label>
+      <input
+        type="email"
+        placeholder="Digite Correo"
+        matInput
+        formControlName="strCorreo"
+        
+      />  
+    <!-- <mat-error *ngIf="form.invalid">{{getErrorMessage()}}</mat-error>
+        -->
+    </mat-form-field>
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Telefono</mat-label>
+      <input
+        type="text"
+        placeholder="Digite Telefono"
+        matInput
+        formControlName="strTelefono"
+      />
+    </mat-form-field>
+  </div>
+  <!-- Area y Estado -->
+  <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout="row"
+    fxLayoutAlign.xs="start start"
+    fxLayoutAlign.sm="start start"
+    fxLayoutAlign="start center"
+    fxLayoutGap.xs="1px"
+    fxLayoutGap.sm="1px"
+    fxLayoutGap="20px"
+    fxFlexFill
+  >
+    <mat-form-field appearance="outline" style="width: 50%">
+      <mat-label>Area(*)</mat-label>
+      <input
+        type="text"
+        placeholder="Seleccione Area"
+        aria-label="Area"
+        matInput
+        formControlName="area"
+        [matAutocomplete]="areaAutocomplete"
+      />
+      <mat-autocomplete
+        #areaAutocomplete="matAutocomplete"
+        [displayWith]="mostrarNombreAreaSelect"
+      >
+        <mat-option
+          *ngFor="let area of listaAreaFiltrada | async"
+          [value]="area"
+        >
+          {{ area.strNombre }}
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-error *ngFor="let validation of validation_msgs.areaAutocompleteControl">
+        <div *ngIf="form.controls.area.hasError(validation.type)">
+          {{validation.message}}
+        </div>
+      </mat-error>
+
+    </mat-form-field>
+
+    <div style="width: 50%">
+      <mat-slide-toggle formControlName="intEstado" color="primary">
+        Estado
+      </mat-slide-toggle>
+    </div>
+  </div>
+  <div>(*)Campo obligatorio</div>
+  <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout
+    fxLayoutAlign.xs="space-around stretch"
+    fxLayoutAlign.sm="space-around stretch"
+    fxLayoutAlign="center end"
+    fxLayoutGap.xs="10px"
+    fxLayoutGap.sm="10px"
+    fxLayoutGap="2px"
+    fxFlexFill
+  >
+    <button
+      mat-flat-button
+      type="submit"
+      color="primary"
+      [disabled]="soloLectura"
+    >
+      <mat-icon>save</mat-icon> <span>Guardar</span>
+    </button>
+    <button mat-flat-button type="button" color="accent" (click)="cancelar()">
+      <span>Cancelar</span>
+    </button>
+  </div>
+</form>

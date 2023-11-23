@@ -1,0 +1,164 @@
+
+<!--#region Titulo -->
+<h3 class="title">Busqueda por Ubicación</h3>
+<!--#endregion -->
+
+<form [formGroup]="form" fxFill fxLayout="column" fxLayoutGap="5px">
+  <!-- Nivel 0 - Sitio -->
+  <mat-card >
+    <mat-card-title class="sub_title">Nivel 0 - Sitio</mat-card-title>
+    <mat-card-content>
+      <div fxLayout="column" fxFill>
+        <!-- Datos de Prefijo G -->
+        <mat-form-field appearance="outline">
+          <mat-label>G</mat-label>
+          <input
+            type="text"
+            placeholder="Seleccione dato G"
+            aria-label="Dato G"
+            matInput
+            formControlName="datoGSelectAC"
+            [matAutocomplete]="datoGAutocomplete"
+          />
+          <mat-autocomplete
+            #datoGAutocomplete="matAutocomplete"
+            [displayWith]="mostrarNombreDatoGSelect"
+            (optionSelected)="selectedDatoG($event)"
+          >
+            <mat-option
+              *ngFor="let datoG of listaDatoGFiltrada | async"
+              [value]="datoG"
+            >
+              {{ datoG.strNombre }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <!-- Nivel 1 - Sistema -->
+  <mat-card>
+    <mat-card-title class="sub_title">Nivel 1 - Sistema</mat-card-title>
+    <mat-card-content>
+      <div fxLayout="column" fxFill fxLayoutGap="5px">
+        <h4 class="sub_title">Criterios de Búsqueda</h4>
+        <!-- GRILLA -->
+
+        <mat-form-field appearance="outline" style="width: 100%">
+          <mat-label>Codigo</mat-label>
+          <input
+            matInput
+            placeholder="Codigo"
+            type="text"
+            [(ngModel)]="strBuscarCodigo"
+          />
+        </mat-form-field>
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-label>Especialidad</mat-label>
+            <mat-select
+              [(ngModel)]="selectedEspecialidadFiltro"
+              name="especialidad"
+              (selectionChange)="selectedValueEspecialidad($event)"
+            >
+              <mat-option *ngFor="let especialidad of listaEspecialidad" [value]="especialidad.intId">
+                {{ especialidad.strValor }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        
+
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!--#region  Criterios de Busqueda - Filtro -->
+<mat-expansion-panel class="panel-expandible" >
+  <mat-expansion-panel-header>
+   
+  </mat-expansion-panel-header>
+
+  <div
+    fxLayout="row"
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout.md="column"
+    fxLayoutAlign="start start"
+    fxLayoutGap="0.625rem"
+    style="width: 100%"
+  >
+    <div
+      fxLayout="row"
+      fxLayout.xs="column"
+      fxLayout.sm="column"
+      fxLayoutAlign="space-between center"
+      fxLayoutAlign.xs="space-around center"
+      fxLayoutAlign.sm="space-around stretch"
+      fxLayoutGap="0.625rem"
+      fxFlex="80"
+      fxFlex.xs="100"
+      fxFlex.sm="100"
+      style="width: 100%"
+    >
+
+    </div>
+
+    <div
+      fxFlex="10"
+      fxFlex.xs="100"
+      fxFlex.sm="100"
+      fxLayout
+      fxLayout.xs="column"
+      fxLayoutAlign.xs="space-around center"
+      fxLayoutGap.xs="1px"
+      fxLayoutGap="2px"
+      fxLayoutAlign="center end"
+      fxLayout.sm="column"
+      fxLayoutAlign.sm="space-around stretch"
+      fxLayoutGap.sm="1px"
+    >
+      <button
+        mat-flat-button
+        type="button"
+        color="primary"
+        (click)="listar()"
+      >
+        <mat-icon>search</mat-icon> <span>Buscar</span>
+      </button>
+    </div>
+  </div>
+</mat-expansion-panel>
+<!--#endregion -->
+
+
+
+  <!-- Resultado Codigo Generado -->
+  <div>
+    <p class="sub_title">Cód. Generado: {{ codigoGenerado }}</p>
+  </div>
+  <!-- Botones envió informacion -->
+  <div
+    fxLayout.xs="column"
+    fxLayout.sm="column"
+    fxLayout
+    fxLayoutAlign.xs="start stretch"
+    fxLayoutAlign.sm="start stretch"
+    fxLayoutAlign="center start"
+    fxLayoutGap.xs="10px"
+    fxLayoutGap.sm="10px"
+    fxLayoutGap="20px"
+    fxFlexFill
+  >
+    <button
+      mat-flat-button
+      type="button"
+      color="primary"
+      (click)="seleccionar()"
+    >
+      <span>Seleccionar</span>
+    </button>
+    <button mat-flat-button type="button" color="accent" (click)="cancelar()">
+      <span>Cancelar</span>
+    </button>
+  </div>
+</form>
+

@@ -1,0 +1,124 @@
+<mat-sidenav-container class="sidenav-container" color="primary">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    color="primary"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <mat-toolbar
+      ><img
+        *ngIf="!deviceXs"
+        src="assets/img/logo.gif"
+        width="100"
+        style="margin-left: 10px; cursor: pointer"
+        routerLink="/home/inicio"
+      />
+    </mat-toolbar>
+
+    <form
+      autocomplete="off"
+      fxLayout
+      fxLayoutAlign="center center"
+      style="margin-top: 1.25em;"
+    >
+      <mat-form-field
+        appearance="outline"
+        class="buscar"
+        fxFlex="93"
+      >
+        <input
+          matInput
+          placeholder="Buscar"
+          (input)="filterChanged($event)"
+          type="text"
+        />
+      </mat-form-field>
+    </form>
+
+    <mat-tree
+      [dataSource]="dataSource"
+      [treeControl]="treeControl"
+      class="example-tree"
+    >
+      <mat-tree-node
+        *matTreeNodeDef="let node"
+        matTreeNodeToggle
+        matTreeNodePadding
+        matTreeNodePaddingIndent="15"
+      >
+        <button mat-icon-button disabled></button>
+        <mat-icon style="color: #ffff">{{ node.icon }}</mat-icon>
+        <a
+          mat-button
+          href="#/{{ node.link }}"
+          style="color: #ffff"
+          target="_selft"
+          >{{ node.item }}
+        </a>
+      </mat-tree-node>
+      <mat-tree-node
+        *matTreeNodeDef="let node; when: hasChild"
+        matTreeNodePadding
+        matTreeNodePaddingIndent="15"
+      >
+        <button
+          mat-icon-button
+          matTreeNodeToggle
+          [attr.aria-label]="'toggle ' + node.filename"
+          class="mattree_button"
+        >
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
+          </mat-icon>
+        </button>
+        <span style="color: #ffff"> {{ node.item }}</span>
+      </mat-tree-node>
+    </mat-tree>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+      >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+
+      <span>Sistema de Información Técnica - SITEC.Web</span>
+      <span class="example-spacer"></span>
+      <span *ngIf="!deviceXs"> {{ username }} &nbsp;</span>
+      <mat-icon>account_circle</mat-icon>
+      <span class="example-spacer"></span>
+      <mat-slide-toggle
+        (click)="toggleDarkMode()"
+        [(ngModel)]="isDarkMode"
+        matTooltip="{{ nombreModo }}"
+        matTooltipPosition="below"
+      >
+        <mat-icon>brightness_4</mat-icon>
+      </mat-slide-toggle>
+
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="loginService.cerrarSesion()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Cerrar Sesión</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <!-- Add Content Here -->
+
+    <div class="wrap">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
